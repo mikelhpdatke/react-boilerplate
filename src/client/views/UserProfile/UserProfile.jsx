@@ -13,7 +13,7 @@ import CardAvatar from "components/Card/CardAvatar.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
-import avatar from "assets/img/faces/marc.jpg";
+import avatar from "assets/img/faces/me.jpg";
 
 const styles = {
   cardCategoryWhite: {
@@ -158,7 +158,7 @@ function UserProfile(props) {
             </CardAvatar>
             <CardBody profile>
               <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Alec Thompson</h4>
+              <h4 className={classes.cardTitle}>Dat Luong Duc Tuan</h4>
               <p className={classes.description}>
                 Don't be scared of the truth because we need to restart the
                 human foundation in truth And I love you like Kanye loves Kanye
