@@ -59,9 +59,7 @@ function TableList(props) {
         <Card>
           <CardHeader color="primary">
             <h4 className={classes.cardTitleWhite}>Pattern</h4>
-            <p className={classes.cardCategoryWhite}>
-              Here is a pattern for AIML
-            </p>
+           
           </CardHeader>
           <CardBody>
             <TextField
@@ -83,9 +81,6 @@ function TableList(props) {
         <Card>
           <CardHeader color="primary">
             <h4 className={classes.cardTitleWhite}>Template</h4>
-            <p className={classes.cardCategoryWhite}>
-              Here is a template for AIML
-            </p>
           </CardHeader>
           <CardBody>
             <TextField
