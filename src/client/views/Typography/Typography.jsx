@@ -2,28 +2,33 @@ import React from 'react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 // core components
-import Quote from 'components/Typography/Quote.jsx';
-import Muted from 'components/Typography/Muted.jsx';
-import Primary from 'components/Typography/Primary.jsx';
-import Info from 'components/Typography/Info.jsx';
-import Success from 'components/Typography/Success.jsx';
-import Warning from 'components/Typography/Warning.jsx';
-import Danger from 'components/Typography/Danger.jsx';
 import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
+import Fab from '@material-ui/core/Fab';
+import Paper from '@material-ui/core/Paper';
+import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Chip from '@material-ui/core/Chip';
+import FaceIcon from '@material-ui/icons/Face';
+import TextField from '@material-ui/core/TextField';
 
-const style = {
+const style = (theme) => ({
   typo: {
-    paddingLeft: '25%',
-    marginBottom: '40px',
     position: 'relative',
+    width: '300px',
+  },
+  typoTopic: {
+    position: 'relative',
+    minWidth: '250px',
+  },
+  cardHeader: {
+    width: '80px',
   },
   note: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -54,54 +59,160 @@ const style = {
     marginBottom: '3px',
     textDecoration: 'none',
   },
-};
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    flexBasis: '33.33%',
+    flexShrink: 0,
+  },
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(15),
+    color: theme.palette.text.secondary,
+  },
+});
+
+const topics = ['topic1', 'abc123', '12345'];
+const entities = ['entity1', 'abc1235', 'zzzzzzz', 'gg', 'yasuo'];
+const QA = [
+  { Q: 'abc', A: '123' },
+  { Q: 'abc', A: '123' },
+  { Q: 'abc', A: '123' },
+  { Q: 'abc', A: '123' },
+  { Q: 'abc', A: '123' },
+  { Q: 'abc', A: '123' }
+]
 class TypographyPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      topicHeader: 'select Topic',
+      entityHeader: 'select Entity',
+    }
+  }
+
+  handleDelete = data => () => {
+    if (data.label === 'React') {
+      alert('Why would you want to delete React?! :)'); // eslint-disable-line no-alert
+      return;
+    }
+    console.log(data);
+  };
+
   render() {
     const { classes } = this.props;
+    const { topicHeader, entityHeader } = this.state;
     return (
       <Grid
         container
         direction="row"
         justify="space-around"
-        alignItems="center"
+        alignItems="flex-start"
       >
-        <Grid item>
-          <ExpansionPanel>
+        <Grid item xs={3}>
+          <ExpansionPanel className={classes.typoTopic}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>
-                Expansion Panel 1
-              </Typography>
+              <Typography className={classes.heading}>Topics</Typography>
+              <Typography className={classes.secondaryHeading}>{topicHeader}</Typography>
             </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Typography>
-                Lorem ipsum dolor sit ametLorem ipsum dolor sit amet
-              </Typography>
+            <ExpansionPanelDetails >
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+                style={{ width: '100%' }}
+              >
+                {topics.map(val => (
+                  <Grid item>
+                    <Chip
+                      icon={<FaceIcon />}
+                      label={val}
+                      onClick={() => { this.setState({ topicHeader: val }) }}
+                      className={classes.chip}
+                      color="secondary"
+                      style={{ marginBottom: '5px' }}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
             </ExpansionPanelDetails>
           </ExpansionPanel>
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>
-                Expansion Panel 2
-              </Typography>
+              <Typography className={classes.heading}>Entities</Typography>
+              <Typography className={classes.secondaryHeading}>{entityHeader}</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <Typography>Lorem ipsum dolor sit amet</Typography>
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+                style={{ width: '100%' }}
+              >
+                {entities.map(val => (
+                  <Grid item>
+                    <Chip
+                      icon={<FaceIcon />}
+                      label={val}
+                      onClick={() => { this.setState({ entityHeader: val }) }}
+                      className={classes.chip}
+                      color="primary"
+                      style={{ marginBottom: '5px' }}
+                    />
+                  </Grid>
+                ))}
+                <Grid item>
+                  <Fab color="primary" aria-label="Add" size="small" className={classes.fab}>
+                    <AddIcon />
+                  </Fab></Grid>
+              </Grid>
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </Grid>
-        <Grid item>
+        <Grid item xs={6}>
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>
-                Expansion Panel 3
-              </Typography>
+              <Typography className={classes.heading}>Q/A</Typography>
+              <Typography className={classes.secondaryHeading}>I am an expansion panel</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
-              <Typography>Lorem ipsum dolor sit amet</Typography>
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+              >
+                {QA.map(val => (
+                  <Grid item>
+                  <Paper style={{border: '3px solid #2c129d', marginBottom:'8px'}}>
+                    <TextField
+                      required
+                      id="pattern-textfield"
+                      label='Q'
+                      margin="normal"
+                      variant="outlined"
+                      value={val.Q}
+                      fullWidth
+                      multiline
+                    />
+                    <TextField
+                      required
+                      id="pattern-textfield"
+                      label='A'
+                      margin="normal"
+                      value={val.A}
+                      variant="outlined"
+                      fullWidth
+                      multiline
+                    />
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </Grid>
-      </Grid>
+      </Grid >
     );
   }
 }
