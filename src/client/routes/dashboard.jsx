@@ -10,7 +10,7 @@ import Unarchive from '@material-ui/icons/Unarchive';
 // core components/views
 import DashboardPage from 'views/Dashboard/Dashboard.jsx';
 import UserProfile from 'views/UserProfile/UserProfile.jsx';
-import TableList from 'views/TableList/TableList.jsx';
+import AIML from 'views/AIML/AIML.jsx';
 import Typography from 'views/Typography/Typography.jsx';
 import Icons from 'views/Icons/Icons.jsx';
 import Maps from 'views/Maps/Maps.jsx';
@@ -36,7 +36,7 @@ const dashboardRoutes = [
     sidebarName: 'AIML',
     navbarName: 'AIML',
     icon: 'content_paste',
-    component: TableList,
+    component: AIML,
   },
   {
     path: '/typography',

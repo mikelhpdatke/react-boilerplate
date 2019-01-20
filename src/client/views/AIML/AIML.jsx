@@ -11,11 +11,14 @@ import CardBody from 'components/Card/CardBody.jsx';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
+import NavigationIcon from '@material-ui/icons/Navigation';
+import Grid from '@material-ui/core/Grid';
 
 const styles = {
   flexContainer: {
     padding: 0,
-    margin: 0,
+    margin: 10,
     listStyle: 'none',
     display: 'flex',
     alignItems: 'center',
@@ -47,58 +50,84 @@ const styles = {
       fontWeight: '400',
       lineHeight: '1',
     },
+    alignItems: 'center',
+    textAlign: 'center',
   },
 };
 
 function TableList(props) {
   const { classes } = props;
   return (
-    <GridContainer justify="center"
-    alignItems="center">
+    <GridContainer justify="center" alignItems="center">
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Pattern</h4>
-           
+            <h4 className={classes.cardTitleWhite}>Question - Answer</h4>
           </CardHeader>
           <CardBody>
             <TextField
               required
               id="pattern-textfield"
-              label="Required"
+              label="Q.."
               margin="normal"
               variant="outlined"
               fullWidth
               multiline
             />
-            <Typography color="textSecondary" className={classes.flexContainer}>
-              Advanced pattern tags
-            </Typography>
-          </CardBody>
-        </Card>
-      </GridItem>
-      <GridItem xs={12} sm={12} md={12}>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Template</h4>
-          </CardHeader>
-          <CardBody>
             <TextField
               required
               multiline
               fullWidth
               id="pattern-textfield"
-              label="Required"
+              label="A.."
               margin="normal"
               variant="outlined"
             />
-            <Typography color="textSecondary" className={classes.flexContainer}>
-              Advanced template tags
-            </Typography>
+            <Grid
+              container
+              direction="row"
+              justify="space-around"
+              alignItems="center"
+            >
+              <Grid item>
+                <Fab
+                  variant="extended"
+                  aria-label="Delete"
+                  className={classes.fab}
+                >
+                  Submit
+                </Fab>
+              </Grid>
+              <Grid item>
+                <Fab variant="extended" color="secondary" aria-label="Add">
+                  Check / Preview
+                </Fab>
+              </Grid>
+              <Grid item>
+                <Fab variant="extended" color="primary" aria-label="Add">
+                  Clear
+                </Fab>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              direction="row"
+              justify="space-around"
+              alignItems="center"
+            >
+              <Grid item>
+                <Typography
+                  color="textSecondary"
+                  className={classes.flexContainer}
+                >
+                  View all questions-answers
+                </Typography>
+              </Grid>
+            </Grid>
           </CardBody>
         </Card>
       </GridItem>
-      <GridItem >
+      <GridItem>
         <Button variant="contained" color="primary" size="large">
           Write
         </Button>
