@@ -13,8 +13,9 @@ import UserProfile from 'views/UserProfile/UserProfile.jsx';
 import TableList from 'views/TableList/TableList.jsx';
 import Typography from 'views/Typography/Typography.jsx';
 import Icons from 'views/Icons/Icons.jsx';
-import Maps from 'views/Maps/Maps.jsx';
+import Services from 'components/Home/Services.js';
 import Manager from 'views/Manager/Manager.jsx';
+import { services } from '../_reducers/services.reducer';
 
 const dashboardRoutes = [
   {
@@ -31,6 +32,9 @@ const dashboardRoutes = [
     icon: LibraryBooks,
     component: Manager,
   },
+  { path: '/services',
+    component: Services,
+},
   { redirect: true, path: '/', to: '/dashboard', navbarName: 'Redirect' },
 ];
 

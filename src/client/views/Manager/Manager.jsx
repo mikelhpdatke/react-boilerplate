@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import Home from 'components/Home/Home.js';
 
 class Manager extends Component {
   render() {
-    return <div>Hello</div>;
+    return <Home />;
   }
 }
 
