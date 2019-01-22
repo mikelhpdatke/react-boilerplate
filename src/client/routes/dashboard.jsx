@@ -32,9 +32,11 @@ const dashboardRoutes = [
     icon: LibraryBooks,
     component: Manager,
   },
-  { path: '/services',
+  {
+    path: '/services',
     component: Services,
-},
+    navbarName: 'Services',
+  },
   { redirect: true, path: '/', to: '/dashboard', navbarName: 'Redirect' },
 ];
 

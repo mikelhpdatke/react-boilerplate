@@ -64,9 +64,9 @@ class Dashboard extends React.Component {
                 <CardIcon color="warning">
                   <Icon>content_copy</Icon>
                 </CardIcon>
-                <p className={classes.cardCategory}>Used Space</p>
+                <p className={classes.cardCategory}>Bộ nhớ</p>
                 <h3 className={classes.cardTitle}>
-                  49/50 <small>GB</small>
+                  4/50 <small>GB</small>
                 </h3>
               </CardHeader>
               <CardFooter stats>
@@ -87,13 +87,13 @@ class Dashboard extends React.Component {
                 <CardIcon color="success">
                   <Store />
                 </CardIcon>
-                <p className={classes.cardCategory}>Revenue</p>
-                <h3 className={classes.cardTitle}>$34,245</h3>
+                <p className={classes.cardCategory}>Số bản ghi</p>
+                <h3 className={classes.cardTitle}>321,245</h3>
               </CardHeader>
               <CardFooter stats>
                 <div className={classes.stats}>
                   <DateRange />
-                  Last 24 Hours
+                  24 giờ gần nhất
                 </div>
               </CardFooter>
             </Card>
@@ -104,13 +104,13 @@ class Dashboard extends React.Component {
                 <CardIcon color="danger">
                   <Icon>info_outline</Icon>
                 </CardIcon>
-                <p className={classes.cardCategory}>Fixed Issues</p>
+                <p className={classes.cardCategory}>Số lỗ hổng</p>
                 <h3 className={classes.cardTitle}>75</h3>
               </CardHeader>
               <CardFooter stats>
                 <div className={classes.stats}>
                   <LocalOffer />
-                  Tracked from Github
+                  Truy xuất từ database
                 </div>
               </CardFooter>
             </Card>
@@ -121,13 +121,13 @@ class Dashboard extends React.Component {
                 <CardIcon color="info">
                   <Accessibility />
                 </CardIcon>
-                <p className={classes.cardCategory}>Followers</p>
+                <p className={classes.cardCategory}>Số người dùng</p>
                 <h3 className={classes.cardTitle}>+245</h3>
               </CardHeader>
               <CardFooter stats>
                 <div className={classes.stats}>
                   <Update />
-                  Just Updated
+                  Mới cập nhật
                 </div>
               </CardFooter>
             </Card>
@@ -146,17 +146,16 @@ class Dashboard extends React.Component {
                 />
               </CardHeader>
               <CardBody>
-                <h4 className={classes.cardTitle}>Daily Sales</h4>
+                <h4 className={classes.cardTitle}>Lỗ hổng hằng ngày</h4>
                 <p className={classes.cardCategory}>
                   <span className={classes.successText}>
-                    <ArrowUpward className={classes.upArrowCardCategory} /> 55%
+                    <ArrowUpward className={classes.upArrowCardCategory} /> Tăng 55% hôm nay
                   </span>{' '}
-                  increase in today sales.
                 </p>
               </CardBody>
               <CardFooter chart>
                 <div className={classes.stats}>
-                  <AccessTime /> updated 4 minutes ago
+                  <AccessTime /> Cập nhật 1 ngày trước
                 </div>
               </CardFooter>
             </Card>
@@ -174,14 +173,14 @@ class Dashboard extends React.Component {
                 />
               </CardHeader>
               <CardBody>
-                <h4 className={classes.cardTitle}>Email Subscriptions</h4>
+                <h4 className={classes.cardTitle}>Thống kê lượt truy cập</h4>
                 <p className={classes.cardCategory}>
-                  Last Campaign Performance
+                
                 </p>
               </CardBody>
               <CardFooter chart>
                 <div className={classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
+                  <AccessTime /> Cập nhật 5 giờ trước
                 </div>
               </CardFooter>
             </Card>
@@ -198,14 +197,14 @@ class Dashboard extends React.Component {
                 />
               </CardHeader>
               <CardBody>
-                <h4 className={classes.cardTitle}>Completed Tasks</h4>
+                <h4 className={classes.cardTitle}>Thống kê lỗi đã sửa</h4>
                 <p className={classes.cardCategory}>
-                  Last Campaign Performance
+                  
                 </p>
               </CardBody>
               <CardFooter chart>
                 <div className={classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
+                  <AccessTime /> Cập nhật 6 giờ trước
                 </div>
               </CardFooter>
             </Card>

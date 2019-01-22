@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { CardHeader } from '@material-ui/core';
 import { homeActions, servicesActions, dialogsActions } from '../../_actions';
 import ConnectedAlertDialogSlide from './Dialogs';
-import { verifiedIcon, warningIcon } from '../icon/Icon';
+import { verifiedIcon, warningIcon } from './icon/Icon';
 
 const styles = theme => ({
   paper: {

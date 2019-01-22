@@ -22,26 +22,27 @@ const Sidebar = ({ ...props }) => {
     return props.location.pathname.indexOf(routeName) > -1;
   }
   const { classes, color, logo, image, logoText, routes } = props;
-  let links = (
+  const links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
         if (prop.redirect) return null;
         let activePro = ' ';
         let listItemClasses;
         if (prop.path === '/upgrade-to-pro') {
-          activePro = `${classes.activePro  } `;
+          activePro = `${classes.activePro} `;
           listItemClasses = classNames({
-            [' ' + classes[color]]: true
+            [` ${classes[color]}`]: true,
           });
         } else {
           listItemClasses = classNames({
-            [' ' + classes[color]]: activeRoute(prop.path)
+            [` ${classes[color]}`]: activeRoute(prop.path),
           });
         }
         const whiteFontClasses = classNames({
-          [' ' + classes.whiteFont]: activeRoute(prop.path)
+          [` ${classes.whiteFont}`]: activeRoute(prop.path),
         });
-        if (props.path !== '/serivces')
+        if (prop.path !== '/services') {
+          // console.log(props.path);
           return (
             <NavLink
               to={prop.path}
@@ -65,10 +66,11 @@ const Sidebar = ({ ...props }) => {
               </ListItem>
             </NavLink>
           );
+        }
       })}
     </List>
   );
-  let brand = (
+  const brand = (
     <div className={classes.logo}>
       <a href="#" className={classes.logoLink}>
         <div className={classes.logoImage}>
@@ -78,6 +80,7 @@ const Sidebar = ({ ...props }) => {
       </a>
     </div>
   );
+  console.log('in sidebar...');
   return (
     <div>
       <Hidden mdUp implementation="css">
@@ -101,7 +104,7 @@ const Sidebar = ({ ...props }) => {
           {image !== undefined ? (
             <div
               className={classes.background}
-              style={{ backgroundImage: 'url(' + image + ')' }}
+              style={{ backgroundImage: `url(${image})` }}
             />
           ) : null}
         </Drawer>
@@ -120,7 +123,7 @@ const Sidebar = ({ ...props }) => {
           {image !== undefined ? (
             <div
               className={classes.background}
-              style={{ backgroundImage: 'url(' + image + ')' }}
+              style={{ backgroundImage: `url(${image})` }}
             />
           ) : null}
         </Drawer>
