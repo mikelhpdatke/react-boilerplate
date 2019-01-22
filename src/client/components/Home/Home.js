@@ -7,20 +7,11 @@ import PropTypes from 'prop-types';
 // import Button from '@material-ui/core/Button';
 import { PostApi } from '_helpers/Utils';
 import ConnectedCard from './Card';
+import { Typography, Grid } from '@material-ui/core';
 
 const styles = {
-  h1: {
-    textAlign: 'center',
-    backgroundColor: 'rgba(45, 45, 45, 0.1)',
-    padding: '2px',
-    color: 'red',
-    fontSize: '40px',
-    marginTop: '3px',
-  },
-  contrainer: {
-    marginTop: '50px',
-    display: 'flex',
-    justifyContent: 'space-around',
+  header: {
+    marginBottom: '15px',
   },
 };
 
@@ -77,20 +68,38 @@ class Home extends Component {
 
   render() {
     const { classes } = this.props;
+    const { arr } = this.state;
     return (
       <div>
-        <h1 className={classes.h1}>Controller</h1>
-        <div className={classes.contrainer}>
-          {this.state.arr.map(x => (
-            <ConnectedCard
-              name={x.address}
-              ip={x.ip}
-              port={x.port}
-              card={x.address}
-              status={x.active === true ? 'ACTIVE' : 'INACTIVE'}
-            />
+        <Typography 
+          variant='h3'
+          align='center'
+          color='primary'
+          className={classes.header}
+        >
+          Controller
+        </Typography>
+        <Grid
+          container
+          spacing={24}
+        >
+          {arr.map((x, index) => (
+            <Grid
+              key={index}
+              item 
+              md={6}
+              xs={12}
+            >
+              <ConnectedCard
+                name={x.address}
+                ip={x.ip}
+                port={x.port}
+                card={x.address}
+                status={x.active === true ? 'ACTIVE' : 'INACTIVE'}
+              />
+            </Grid>
           ))}
-        </div>
+        </Grid>
       </div>
     );
   }

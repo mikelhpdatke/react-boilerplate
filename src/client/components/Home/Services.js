@@ -20,6 +20,11 @@ import CloseIcon from '@material-ui/icons/Close';
 import { homeActions } from '_actions/index';
 // import { servicesActions } from '../../_actions';
 import { PostApi, ip } from '_helpers/Utils';
+import { Typography, Grid, Divider } from '@material-ui/core';
+import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";
 
 const socket = openSocket(ip.server);
 function subscribeToTimer(cb) {
@@ -27,6 +32,33 @@ function subscribeToTimer(cb) {
 }
 
 const styles = theme => ({
+  cardCategoryWhite: {
+    "&,& a,& a:hover,& a:focus": {
+      color: "rgba(255,255,255,.62)",
+      margin: "0",
+      fontSize: "14px",
+      marginTop: "0",
+      marginBottom: "0"
+    },
+    "& a,& a:hover,& a:focus": {
+      color: "#FFFFFF"
+    }
+  },
+  cardTitleWhite: {
+    color: "#FFFFFF",
+    marginTop: "0px",
+    minHeight: "auto",
+    fontWeight: "300",
+    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    marginBottom: "3px",
+    textDecoration: "none",
+    "& small": {
+      color: "#777",
+      fontSize: "65%",
+      fontWeight: "400",
+      lineHeight: "1"
+    }
+  },
   root: {
     width: '100%',
     maxWidth: 360,
@@ -169,27 +201,9 @@ class Services extends Component {
         </div>
       );
     }
-    let textField = (
-      <div className="col-4">
-        <TextField
-          id="outlined-uncontrolled"
-          label="PID"
-          name="pid"
-          value={pid}
-          className={classes.textField}
-          onChange={this.handleChange}
-          margin="normal"
-          variant="outlined"
-        />
-      </div>
-    );
-
-    if (selectedIndex !== 2) {
-      textField = <div />;
-    }
     // console.log(this.props.title); this.props.message.card
     return (
-      <div>
+      <React.Fragment>
         <Snackbar
           anchorOrigin={{
             vertical: 'bottom',
@@ -222,13 +236,28 @@ class Services extends Component {
             </IconButton>,
           ]}
         />
-
-        <h1 className={classes.h1}>{message.name}</h1>
-        <div className="container" style={{ marginTop: '200px' }}>
-          <div className="row justify-content-center">
-            <div className="col-4">
-              <div className={classes.root}>
-                <List component="nav" className={classes.card}>
+        <Card>
+          <CardHeader color='primary'>
+            <Typography variant='h3' className={classes.cardTitleWhite}>
+              {`${message.name}`}
+            </Typography>
+          </CardHeader>
+          <CardBody>
+            <Grid
+              container
+              spacing={24}
+            >
+              <Grid
+                item
+                md={1}
+                xs={0}
+              ></Grid>
+              <Grid
+                item
+                md={selectedIndex === 2 ? 5 : 10}
+                xs={12}
+              >
+                <List component="nav">
                   <ListItem
                     button
                     aria-haspopup="true"
@@ -258,16 +287,40 @@ class Services extends Component {
                     </MenuItem>
                   ))}
                 </Menu>
-              </div>
-            </div>
-
-            {textField}
-          </div>
-          <div className="container">
-            <div className="row justify-content-center">{sendState}</div>
-          </div>
-        </div>
-      </div>
+              </Grid>
+              <Grid
+                item
+                md={selectedIndex === 2 ? 5 : 0}
+                xs={selectedIndex === 2 ? 12 : 0}
+              >
+                {selectedIndex === 2 ? (
+                  <TextField
+                    id="outlined-uncontrolled"
+                    label="PID"
+                    name="pid"
+                    value={pid}
+                    className={classes.textField}
+                    onChange={this.handleChange}
+                    margin="normal"
+                    variant="outlined"
+                    fullWidth
+                  />
+                ) : null}
+              </Grid>
+              <Grid
+                item
+                md={1}
+                xs={0}
+              >
+              </Grid>
+            </Grid>
+            <Divider></Divider>
+          </CardBody>
+          <CardFooter>
+            {sendState}
+          </CardFooter>
+        </Card>
+      </React.Fragment>
     );
   }
 }

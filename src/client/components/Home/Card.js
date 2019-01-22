@@ -3,44 +3,46 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { CardHeader } from '@material-ui/core';
 import { homeActions, servicesActions, dialogsActions } from '../../_actions';
 import ConnectedAlertDialogSlide from './Dialogs';
 import { verifiedIcon, warningIcon } from './icon/Icon';
+import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";
+import { Grid } from '@material-ui/core';
 
 const styles = theme => ({
-  paper: {
-    position: 'absolute',
-    width: theme.spacing.unit * 50,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
+  cardCategoryWhite: {
+    "&,& a,& a:hover,& a:focus": {
+      color: "rgba(255,255,255,.62)",
+      margin: "0",
+      fontSize: "14px",
+      marginTop: "0",
+      marginBottom: "0"
+    },
+    "& a,& a:hover,& a:focus": {
+      color: "#FFFFFF"
+    }
   },
-  card: {
-    minWidth: 275,
-    border: '3px solid rgb(131, 167, 233)',
-    borderRadius: '20px',
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-  fab: {
-    margin: theme.spacing.unit,
+  cardTitleWhite: {
+    color: "#FFFFFF",
+    marginTop: "0px",
+    minHeight: "auto",
+    fontWeight: "300",
+    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    marginBottom: "3px",
+    textDecoration: "none",
+    "& small": {
+      color: "#777",
+      fontSize: "65%",
+      fontWeight: "400",
+      lineHeight: "1"
+    }
   },
 });
 class SimpleCard extends Component {
@@ -58,11 +60,13 @@ class SimpleCard extends Component {
     if (status === 'INACTIVE') {
       button = (
         <Button
-          size="small"
           onClick={() => {
             console.log('openedddddddddd');
             openDialogs(true, ip);
           }}
+          component={Link}
+          to='#'
+          variant="contained"
         >
           Connect
         </Button>
@@ -72,19 +76,20 @@ class SimpleCard extends Component {
           src={warningIcon}
           width="25"
           height="25"
-          alt=""
-          style={{ margin: '5px 10px' }}
+          alt="warning"
         />
       );
     } else {
       button = (
         <Button
-          size="small"
           onClick={() => {
             send({ name: this.props.name, id: this.props.card });
           }}
+          component={Link}
+          to='/services'
+          variant="contained"
         >
-          <Link to="/services">Analyse</Link>
+          Analyse
         </Button>
       );
       statusButton = (
@@ -92,38 +97,58 @@ class SimpleCard extends Component {
           src={verifiedIcon}
           width="25"
           height="25"
-          alt=""
-          style={{ margin: '5px 10px' }}
+          alt="verified"
         />
       );
     }
 
     return (
-      <Card className={classes.card}>
-        <CardHeader
-          action={statusButton}
-          title={`Client: ${this.props.name}`}
-          subheader={`${this.props.name}`}
-        />
-        <CardContent>
-          <Typography variant="h5" component="h2">
-            {`IP: ${this.props.ip}`}
-          </Typography>
-          <Typography className={classes.pos} color="textSecondary">
-            {`PORT: ${this.props.port}`}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            size="small"
-            color={status === 'ACTIVE' ? 'primary' : 'secondary'}
-          >
-            {status}
-          </Button>
-          {button}
-          <ConnectedAlertDialogSlide />
-        </CardActions>
-      </Card>
+      <React.Fragment>
+        <Card>
+          <CardHeader color={status === 'ACTIVE' ? 'primary' : 'danger'}>
+            <Typography variant='h4' className={classes.cardTitleWhite}>
+              {`Client: ${this.props.name}`}
+            </Typography>
+            <Typography variant='subtitle1' className={classes.cardCategoryWhite}>
+              {`${this.props.name}`}
+            </Typography>
+          </CardHeader>
+          <CardBody>
+            <Grid
+              container
+              spacing={24}
+            >
+              <Grid
+                item
+                xs={10}
+              >
+                <Typography variant='h6'>
+                  {`IP: ${this.props.ip}`}
+                </Typography>
+                <Typography variant='body1'>
+                  {`PORT: ${this.props.port}`}
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                xs={2}
+              >
+                {statusButton}
+              </Grid>
+            </Grid>
+          </CardBody>
+          <CardFooter>
+            <Button
+              color={status === 'ACTIVE' ? 'primary' : 'secondary'}
+              variant="contained"
+            >
+              {status}
+            </Button>
+            {button}
+            <ConnectedAlertDialogSlide />
+          </CardFooter>
+        </Card>
+      </React.Fragment>
     );
   }
 }
