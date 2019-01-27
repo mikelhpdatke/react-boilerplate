@@ -30,6 +30,10 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
+// component
+import QAForm from 'components/QA/QA.jsx';
+import ListQA from 'components/QA/ListQA.jsx';
+
 const style = theme => ({
   formControl: {
     margin: theme.spacing.unit,
@@ -90,9 +94,11 @@ class TypographyPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      topic: 'select Topic',
-      entity: 'select Entity',
-      chatbot: 'select chatbot',
+      Q: '',
+      A: '',
+      topic: '.',
+      entity: '.',
+      chatbot: '.',
       listChatBot: [
         {
           id_chatbot: 1,
@@ -108,22 +114,21 @@ class TypographyPage extends React.Component {
         },
       ],
       onSubmit: false,
-      QA : [
-        { Q: 'abc', A: '123' },
-        { Q: 'abc', A: '123' },
-        { Q: 'abc', A: '123' },
-        { Q: 'abc', A: '123' },
-        { Q: 'abc', A: '123' },
-        { Q: 'abc', A: '123' },
+      QA: [
+        {
+          text_question: 'bộ chính trị là gì',
+          text_answer: 'là tập hợp các đảng viên ưu tú nhất ',
+        },
       ],
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
     PostApi(`${ip.server}/chatbots`, {})
       .then(res => {
-        //console.log(res);
+        // console.log(res);
         if (Array.isArray(res)) this.setState({ listChatBot: res });
       })
       .catch(err => {
@@ -154,21 +159,57 @@ class TypographyPage extends React.Component {
   };
 
   handleChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+    if (e.target.id == 'Q' || e.target.id == 'A')
+      this.setState({ [e.target.id]: e.target.value });
+    else
+      this.setState({ [e.target.name]: e.target.value }, () => {
+        const { topic, entity, chatbot } = this.state;
+        if (topic != '.' && entity != '.' && chatbot != '.') {
+          // console.log(topic, entity, chatbot);
+        }
+      });
+  }
+
+  handleSubmit(obj) {
+    // console.log(obj);
+    const { textanswer, textquestion } = obj;
+    const {
+      topic: topicname,
+      entity: entityname,
+      chatbot: chatbotname,
+    } = this.state;
+    PostApi(`${ip.server}/textdbtoaimlconverter/addquestions`, {
+      textquestion,
+      textanswer,
+      topicname,
+      entityname,
+      chatbotname,
+    })
+      .then(res => {
+        // console.log(res);
+        // window.location.reload();
+        if (Array.isArray(res))
+          this.setState(state => ({
+            QA: [
+              ...state.QA,
+              {
+                id_topics_q_a: res,
+                textanswer,
+                textquestion,
+              },
+            ],
+          }));
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
     const { classes } = this.props;
-    const {
-      topic,
-      entity,
-      chatbot,
-      listChatBot,
-      listTopic,
-      listEntity,
-      onSubmit,
-      QA
-    } = this.state;
+    const { topic, entity, chatbot, listEntity, onSubmit } = this.state;
+    // console.log('in Typograpy')
+    // console.log(QA);
     return (
       <Grid
         container
@@ -234,99 +275,10 @@ class TypographyPage extends React.Component {
           </FormControl>
         </GridItem>
         <Grid item md={12} xs={12}>
-          <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Question - Answer</h4>
-            </CardHeader>
-            <CardBody>
-              <TextField
-                required
-                id="pattern-textfield"
-                label="Q.."
-                margin="normal"
-                variant="outlined"
-                fullWidth
-                multiline
-              />
-              <TextField
-                required
-                multiline
-                fullWidth
-                id="pattern-textfield"
-                label="A.."
-                margin="normal"
-                variant="outlined"
-              />
-              <Grid
-                container
-                direction="row"
-                justify="space-around"
-                alignItems="center"
-              >
-                <Grid item>
-                  <Fab
-                    variant="extended"
-                    aria-label="Delete"
-                    color="primary"
-                    className={classes.fab}
-                  >
-                    Add
-                  </Fab>
-                </Grid>
-              </Grid>
-            </CardBody>
-          </Card>
+          <QAForm onSubmit={this.handleSubmit} />
         </Grid>
         <Grid item md={12} xs={12}>
-          <ExpansionPanel>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>Q/A</Typography>
-              <Typography className={classes.secondaryHeading}>
-                List Q - A
-              </Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Grid
-                container
-                direction="column"
-                justify="center"
-                alignItems="center"
-              >
-                {QA.map(val => (
-                  <Grid item>
-                    <Paper
-                      style={{
-                        border: '3px solid #2c129d',
-                        marginBottom: '8px',
-                        width:'800px'
-                      }}
-                    >
-                      <TextField
-                        required
-                        id="pattern-textfield"
-                        label="Q"
-                        margin="normal"
-                        variant="outlined"
-                        value={val.Q}
-                        fullWidth
-                        multiline
-                      />
-                      <TextField
-                        required
-                        id="pattern-textfield"
-                        label="A"
-                        margin="normal"
-                        value={val.A}
-                        variant="outlined"
-                        fullWidth
-                        multiline
-                      />
-                    </Paper>
-                  </Grid>
-                ))}
-              </Grid>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+          <ListQA topic={topic} entity={entity} chatbot={chatbot} />
         </Grid>
       </Grid>
     );
