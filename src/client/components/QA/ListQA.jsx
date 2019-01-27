@@ -60,7 +60,7 @@ const styles = theme => ({
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
+    flexBasis: '45%',
     flexShrink: 0,
   },
   secondaryHeading: {
@@ -76,22 +76,25 @@ class ListQA extends React.Component {
       chatbot: '.',
       topic: '.',
       entity: '.',
+      newEle: '.',
       QA: [],
     };
+    this.data = new Map();
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillReceiveProps(props) {
-    const { chatbot, topic, entity } = props;
-    // console.log('???');
+    const { chatbot, topic, entity, newEle } = props;
+    console.log('???');
     // console.log(chatbot, topic, entity);
     if (chatbot != '.' && topic != '.' && entity != '.')
       if (
         !(
           chatbot == this.props.chatbot &&
           topic == this.props.topic &&
-          entity == this.props.entity
+          entity == this.props.entity &&
+          newEle == this.props.newEle
         )
       )
         PostApi(`${ip.server}/textdbtoaimlconverter/listquestions`, {
@@ -100,10 +103,13 @@ class ListQA extends React.Component {
           entityname: entity,
         })
           .then(res => {
-            // console.log('in ListQA PostApi');
-            // console.log(res);
+            console.log('in ListQA PostApi');
+            console.log(res);
             if (Array.isArray(res)) {
               this.setState({ QA: res });
+              for (let i = 0; i < res.length; i++) {
+                this.data.set(res[i].id_topics_q_a, res[i]);
+              }
             }
           })
           .catch(err => {
@@ -112,13 +118,15 @@ class ListQA extends React.Component {
   }
 
   handleSubmit(e) {
-    alert('awdasd');
-    e.preventDefault();
+    console.log('in submit');
+    console.log(this.data);
+    this.props.onSubmit(this.data);
   }
 
   // eslint-disable-next-line class-methods-use-this
   handleChange(e) {
-    // console.log(e);
+    this.data.set(e.id_topics_q_a, e);
+    console.log(this.data);
     /*
     const { QA } = this.state;
     for (let i = 0; i < QA.length; i++)
@@ -138,7 +146,7 @@ class ListQA extends React.Component {
   render() {
     const { classes } = this.props;
     const { QA } = this.state;
-    console.log('in listQA');
+    console.log('in listQA render');
     console.log(QA);
     // console.log(this.props.QA);
     return (

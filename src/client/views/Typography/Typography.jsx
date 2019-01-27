@@ -94,8 +94,7 @@ class TypographyPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      Q: '',
-      A: '',
+      newEle:'',
       topic: '.',
       entity: '.',
       chatbot: '.',
@@ -114,13 +113,8 @@ class TypographyPage extends React.Component {
         },
       ],
       onSubmit: false,
-      QA: [
-        {
-          text_question: 'bộ chính trị là gì',
-          text_answer: 'là tập hợp các đảng viên ưu tú nhất ',
-        },
-      ],
     };
+    this.data = new Map();
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -171,43 +165,52 @@ class TypographyPage extends React.Component {
   }
 
   handleSubmit(obj) {
-    // console.log(obj);
-    const { textanswer, textquestion } = obj;
-    const {
-      topic: topicname,
-      entity: entityname,
-      chatbot: chatbotname,
-    } = this.state;
-    PostApi(`${ip.server}/textdbtoaimlconverter/addquestions`, {
-      textquestion,
-      textanswer,
-      topicname,
-      entityname,
-      chatbotname,
-    })
-      .then(res => {
-        // console.log(res);
-        // window.location.reload();
-        if (Array.isArray(res))
-          this.setState(state => ({
-            QA: [
-              ...state.QA,
-              {
-                id_topics_q_a: res,
-                textanswer,
-                textquestion,
-              },
-            ],
-          }));
+    if ('id_topics_q_a' in obj) {
+      console.log('in Typographyyyyy');
+      console.log(obj);
+    } else {
+      const { textanswer, textquestion } = obj;
+      const {
+        topic: topicname,
+        entity: entityname,
+        chatbot: chatbotname,
+      } = this.state;
+      PostApi(`${ip.server}/textdbtoaimlconverter/addquestions`, {
+        textquestion,
+        textanswer,
+        topicname,
+        entityname,
+        chatbotname,
       })
-      .catch(err => {
-        console.log(err);
-      });
+        .then(res => {
+          console.log('in add Typo.....');
+          console.log(res);
+          this.setState({newEle:res});
+          // window.location.reload();
+          /*
+          if (Array.isArray(res))
+            this.setState(state => ({
+              QA: [
+                ...state.QA,
+                {
+                  id_topics_q_a: res,
+                  textanswer,
+                  textquestion,
+                },
+              ],
+            }));
+            */
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+    // console.log(obj);
   }
 
   render() {
     const { classes } = this.props;
-    const { topic, entity, chatbot, listEntity, onSubmit } = this.state;
+    const { topic, entity, chatbot, listEntity, onSubmit, newEle } = this.state;
     // console.log('in Typograpy')
     // console.log(QA);
     return (
@@ -278,7 +281,13 @@ class TypographyPage extends React.Component {
           <QAForm onSubmit={this.handleSubmit} />
         </Grid>
         <Grid item md={12} xs={12}>
-          <ListQA topic={topic} entity={entity} chatbot={chatbot} />
+          <ListQA
+            newEle={newEle}
+            topic={topic}
+            entity={entity}
+            chatbot={chatbot}
+            onSubmit={this.handleSubmit}
+          />
         </Grid>
       </Grid>
     );
