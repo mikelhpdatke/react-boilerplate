@@ -1,6 +1,9 @@
 import React from 'react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
+// api
+import { PostApi, ip } from '_helpers/Utils';
+
 // core components
 import GridItem from 'components/Grid/GridItem.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
@@ -73,8 +76,14 @@ class TableList extends React.Component {
     super(props);
     this.state = {
       chatbot: '.',
-      listChatBot: ['abc', '123'],
-      listTopic: ['topc1', 'tp2'],
+      listChatBot: [
+        {
+          id_chatbot: 1,
+          chatbot_name: 'thái bình',
+          username: null,
+        },
+      ],
+      listTopic:[{ id_topic: 17, topic_name: 'câu hỏi chung' }],
       topic: '.',
       onSubmit: false,
       statusSubmit: -1,
@@ -82,6 +91,24 @@ class TableList extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentWillMount() {
+    PostApi(`${ip.server}/chatbots`, {})
+      .then(res => {
+        //console.log(res);
+        if (Array.isArray(res)) this.setState({ listChatBot: res });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    PostApi(`${ip.server}/topics`, {})
+      .then(res => {
+        if (Array.isArray(res)) this.setState({ listTopic: res });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+   
+  }
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -115,7 +142,7 @@ class TableList extends React.Component {
       <GridContainer justify="space-around" alignItems="center">
         <GridItem>
           <FormControl required className={classes.formControl}>
-            <InputLabel htmlFor="age-required">ChatBot</InputLabel>
+            <InputLabel htmlFor="chatbot-required">ChatBot</InputLabel>
             <Select
               value={this.state.chatbot}
               onChange={this.handleChange}
@@ -126,7 +153,7 @@ class TableList extends React.Component {
               className={classes.selectEmpty}
             >
               {this.state.listChatBot.map(val => (
-                <MenuItem value={val}>{val}</MenuItem>
+                <MenuItem value={val.chatbot_name}>{val.chatbot_name}</MenuItem>
               ))}
             </Select>
             <FormHelperText>Required</FormHelperText>
@@ -145,7 +172,7 @@ class TableList extends React.Component {
               className={classes.selectEmpty}
             >
               {this.state.listTopic.map(val => (
-                <MenuItem value={val}>{val}</MenuItem>
+                <MenuItem value={val.topic_name}>{val.topic_name}</MenuItem>
               ))}
             </Select>
             <FormHelperText>Required</FormHelperText>

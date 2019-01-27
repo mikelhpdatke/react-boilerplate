@@ -7,7 +7,7 @@ import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import Fab from '@material-ui/core/Fab';
 import Paper from '@material-ui/core/Paper';
-
+import { PostApi, ip } from '_helpers/Utils';
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
 import GridItem from 'components/Grid/GridItem.jsx';
@@ -37,11 +37,11 @@ const style = theme => ({
   },
   typo: {
     position: 'relative',
-    width: '300px',
+    width: '100%',
   },
   typoTopic: {
     position: 'relative',
-    minWidth: '250px',
+    minWidth: '100%',
   },
   cardHeader: {
     width: '80px',
@@ -57,7 +57,7 @@ const style = theme => ({
     left: '0',
     marginLeft: '20px',
     position: 'absolute',
-    width: '260px',
+    width: '500px',
   },
   cardCategoryWhite: {
     color: 'rgba(255,255,255,.62)',
@@ -86,16 +86,6 @@ const style = theme => ({
   },
 });
 
-const topics = ['topic1', 'abc123', '12345'];
-const entities = ['entity1', 'abc1235', 'zzzzzzz', 'gg', 'yasuo'];
-const QA = [
-  { Q: 'abc', A: '123' },
-  { Q: 'abc', A: '123' },
-  { Q: 'abc', A: '123' },
-  { Q: 'abc', A: '123' },
-  { Q: 'abc', A: '123' },
-  { Q: 'abc', A: '123' },
-];
 class TypographyPage extends React.Component {
   constructor(props) {
     super(props);
@@ -103,12 +93,56 @@ class TypographyPage extends React.Component {
       topic: 'select Topic',
       entity: 'select Entity',
       chatbot: 'select chatbot',
-      listChatBot: ['abc', '123'],
-      listTopic: ['topc1', 'tp2'],
-      listEntity: ['enti1'],
+      listChatBot: [
+        {
+          id_chatbot: 1,
+          chatbot_name: 'thái bình',
+          username: null,
+        },
+      ],
+      listTopic: [{ id_topic: 17, topic_name: 'câu hỏi chung' }],
+      listEntity: [
+        {
+          id_entity: 5,
+          entity_name: 'quần chúng',
+        },
+      ],
       onSubmit: false,
+      QA : [
+        { Q: 'abc', A: '123' },
+        { Q: 'abc', A: '123' },
+        { Q: 'abc', A: '123' },
+        { Q: 'abc', A: '123' },
+        { Q: 'abc', A: '123' },
+        { Q: 'abc', A: '123' },
+      ],
     };
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentWillMount() {
+    PostApi(`${ip.server}/chatbots`, {})
+      .then(res => {
+        //console.log(res);
+        if (Array.isArray(res)) this.setState({ listChatBot: res });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    PostApi(`${ip.server}/topics`, {})
+      .then(res => {
+        if (Array.isArray(res)) this.setState({ listTopic: res });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    PostApi(`${ip.server}/entities`, {})
+      .then(res => {
+        if (Array.isArray(res)) this.setState({ listEntity: res });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   handleDelete = data => () => {
@@ -133,6 +167,7 @@ class TypographyPage extends React.Component {
       listTopic,
       listEntity,
       onSubmit,
+      QA
     } = this.state;
     return (
       <Grid
@@ -154,7 +189,7 @@ class TypographyPage extends React.Component {
               className={classes.selectEmpty}
             >
               {this.state.listChatBot.map(val => (
-                <MenuItem value={val}>{val}</MenuItem>
+                <MenuItem value={val.chatbot_name}>{val.chatbot_name}</MenuItem>
               ))}
             </Select>
             <FormHelperText>Required</FormHelperText>
@@ -173,7 +208,7 @@ class TypographyPage extends React.Component {
               className={classes.selectEmpty}
             >
               {this.state.listTopic.map(val => (
-                <MenuItem value={val}>{val}</MenuItem>
+                <MenuItem value={val.topic_name}>{val.topic_name}</MenuItem>
               ))}
             </Select>
             <FormHelperText>Required</FormHelperText>
@@ -192,7 +227,7 @@ class TypographyPage extends React.Component {
               className={classes.selectEmpty}
             >
               {listEntity.map(val => (
-                <MenuItem value={val}>{val}</MenuItem>
+                <MenuItem value={val.entity_name}>{val.entity_name}</MenuItem>
               ))}
             </Select>
             <FormHelperText>Required</FormHelperText>
@@ -247,7 +282,7 @@ class TypographyPage extends React.Component {
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Typography className={classes.heading}>Q/A</Typography>
               <Typography className={classes.secondaryHeading}>
-                I am an expansion panel
+                List Q - A
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
@@ -263,6 +298,7 @@ class TypographyPage extends React.Component {
                       style={{
                         border: '3px solid #2c129d',
                         marginBottom: '8px',
+                        width:'800px'
                       }}
                     >
                       <TextField
