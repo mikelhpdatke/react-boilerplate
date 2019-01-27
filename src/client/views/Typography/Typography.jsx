@@ -7,18 +7,34 @@ import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import Fab from '@material-ui/core/Fab';
 import Paper from '@material-ui/core/Paper';
+
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
+import GridItem from 'components/Grid/GridItem.jsx';
+
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Chip from '@material-ui/core/Chip';
-import FaceIcon from '@material-ui/icons/Face';
+// import Chip from '@material-ui/core/Chip';
+// import FaceIcon from '@material-ui/icons/Face';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+// import Input from '@material-ui/core/Input';
+// import OutlinedInput from '@material-ui/core/OutlinedInput';
+// import FilledInput from '@material-ui/core/FilledInput';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 
-const style = (theme) => ({
+const style = theme => ({
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+  },
   typo: {
     position: 'relative',
     width: '300px',
@@ -78,15 +94,21 @@ const QA = [
   { Q: 'abc', A: '123' },
   { Q: 'abc', A: '123' },
   { Q: 'abc', A: '123' },
-  { Q: 'abc', A: '123' }
-]
+  { Q: 'abc', A: '123' },
+];
 class TypographyPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      topicHeader: 'select Topic',
-      entityHeader: 'select Entity',
-    }
+      topic: 'select Topic',
+      entity: 'select Entity',
+      chatbot: 'select chatbot',
+      listChatBot: ['abc', '123'],
+      listTopic: ['topc1', 'tp2'],
+      listEntity: ['enti1'],
+      onSubmit: false,
+    };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleDelete = data => () => {
@@ -97,83 +119,136 @@ class TypographyPage extends React.Component {
     console.log(data);
   };
 
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
   render() {
     const { classes } = this.props;
-    const { topicHeader, entityHeader } = this.state;
+    const {
+      topic,
+      entity,
+      chatbot,
+      listChatBot,
+      listTopic,
+      listEntity,
+      onSubmit,
+    } = this.state;
     return (
       <Grid
         container
         direction="row"
         justify="space-around"
-        alignItems="flex-start"
+        alignItems="center"
       >
-        <Grid item xs={3}>
-          <ExpansionPanel className={classes.typoTopic}>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>Topics</Typography>
-              <Typography className={classes.secondaryHeading}>{topicHeader}</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails >
+        <GridItem>
+          <FormControl required className={classes.formControl}>
+            <InputLabel htmlFor="age-required">ChatBot</InputLabel>
+            <Select
+              value={this.state.chatbot}
+              onChange={this.handleChange}
+              name="chatbot"
+              inputProps={{
+                id: 'chatbot-required',
+              }}
+              className={classes.selectEmpty}
+            >
+              {this.state.listChatBot.map(val => (
+                <MenuItem value={val}>{val}</MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>Required</FormHelperText>
+          </FormControl>
+        </GridItem>
+        <GridItem>
+          <FormControl required className={classes.formControl}>
+            <InputLabel htmlFor="age-required">Topic</InputLabel>
+            <Select
+              value={this.state.topic}
+              onChange={this.handleChange}
+              name="topic"
+              inputProps={{
+                id: 'topic-required',
+              }}
+              className={classes.selectEmpty}
+            >
+              {this.state.listTopic.map(val => (
+                <MenuItem value={val}>{val}</MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>Required</FormHelperText>
+          </FormControl>
+        </GridItem>
+        <GridItem>
+          <FormControl required className={classes.formControl}>
+            <InputLabel htmlFor="entity-required">Entity</InputLabel>
+            <Select
+              value={entity}
+              onChange={this.handleChange}
+              name="entity"
+              inputProps={{
+                id: 'entity-required',
+              }}
+              className={classes.selectEmpty}
+            >
+              {listEntity.map(val => (
+                <MenuItem value={val}>{val}</MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>Required</FormHelperText>
+          </FormControl>
+        </GridItem>
+        <Grid item md={12} xs={12}>
+          <Card>
+            <CardHeader color="primary">
+              <h4 className={classes.cardTitleWhite}>Question - Answer</h4>
+            </CardHeader>
+            <CardBody>
+              <TextField
+                required
+                id="pattern-textfield"
+                label="Q.."
+                margin="normal"
+                variant="outlined"
+                fullWidth
+                multiline
+              />
+              <TextField
+                required
+                multiline
+                fullWidth
+                id="pattern-textfield"
+                label="A.."
+                margin="normal"
+                variant="outlined"
+              />
               <Grid
                 container
-                direction="column"
-                justify="center"
+                direction="row"
+                justify="space-around"
                 alignItems="center"
-                style={{ width: '100%' }}
               >
-                {topics.map(val => (
-                  <Grid item>
-                    <Chip
-                      icon={<FaceIcon />}
-                      label={val}
-                      onClick={() => { this.setState({ topicHeader: val }) }}
-                      className={classes.chip}
-                      color="secondary"
-                      style={{ marginBottom: '5px' }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-          <ExpansionPanel>
-            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography className={classes.heading}>Entities</Typography>
-              <Typography className={classes.secondaryHeading}>{entityHeader}</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Grid
-                container
-                direction="column"
-                justify="center"
-                alignItems="center"
-                style={{ width: '100%' }}
-              >
-                {entities.map(val => (
-                  <Grid item>
-                    <Chip
-                      icon={<FaceIcon />}
-                      label={val}
-                      onClick={() => { this.setState({ entityHeader: val }) }}
-                      className={classes.chip}
-                      color="primary"
-                      style={{ marginBottom: '5px' }}
-                    />
-                  </Grid>
-                ))}
                 <Grid item>
-                  <Fab color="primary" aria-label="Add" size="small" className={classes.fab}>
-                    <AddIcon />
-                  </Fab></Grid>
+                  <Fab
+                    variant="extended"
+                    aria-label="Delete"
+                    color="primary"
+                    className={classes.fab}
+                  >
+                    Add
+                  </Fab>
+                </Grid>
               </Grid>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+            </CardBody>
+          </Card>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item md={12} xs={12}>
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <Typography className={classes.heading}>Q/A</Typography>
-              <Typography className={classes.secondaryHeading}>I am an expansion panel</Typography>
+              <Typography className={classes.secondaryHeading}>
+                I am an expansion panel
+              </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Grid
@@ -184,27 +259,32 @@ class TypographyPage extends React.Component {
               >
                 {QA.map(val => (
                   <Grid item>
-                  <Paper style={{border: '3px solid #2c129d', marginBottom:'8px'}}>
-                    <TextField
-                      required
-                      id="pattern-textfield"
-                      label='Q'
-                      margin="normal"
-                      variant="outlined"
-                      value={val.Q}
-                      fullWidth
-                      multiline
-                    />
-                    <TextField
-                      required
-                      id="pattern-textfield"
-                      label='A'
-                      margin="normal"
-                      value={val.A}
-                      variant="outlined"
-                      fullWidth
-                      multiline
-                    />
+                    <Paper
+                      style={{
+                        border: '3px solid #2c129d',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      <TextField
+                        required
+                        id="pattern-textfield"
+                        label="Q"
+                        margin="normal"
+                        variant="outlined"
+                        value={val.Q}
+                        fullWidth
+                        multiline
+                      />
+                      <TextField
+                        required
+                        id="pattern-textfield"
+                        label="A"
+                        margin="normal"
+                        value={val.A}
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                      />
                     </Paper>
                   </Grid>
                 ))}
@@ -212,7 +292,7 @@ class TypographyPage extends React.Component {
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </Grid>
-      </Grid >
+      </Grid>
     );
   }
 }

@@ -5,6 +5,7 @@ import './index.css';
 import { Provider } from 'react-redux';
 import { App } from './components/App';
 import * as serviceWorker from './serviceWorker';
+import 'assets/css/material-dashboard-react.css?v=1.5.0';
 
 import { store } from './_helpers';
 
