@@ -23,7 +23,7 @@ const options = [
   'Luna',
   'Oberon',
   'Phobos',
-  'Pyxis',
+  'PyxisPyxisPyxisPyxisPyxisPyxisPyxisPyxis',
   'Sedna',
   'Titania',
   'Triton',
@@ -106,6 +106,5 @@ ConfirmationDialogRaw.propTypes = {
   onClose: PropTypes.func,
   value: PropTypes.string,
 };
-
 
 export default ConfirmationDialogRaw;
