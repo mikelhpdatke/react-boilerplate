@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import GridItem from 'components/Grid/GridItem.jsx';
 import Fab from '@material-ui/core/Fab';
-
+import InputQA from './InputQA.jsx';
 const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit,
@@ -22,23 +22,82 @@ class QA extends React.Component {
     this.state = {
       Q: '',
       A: '',
+      chatbot: '.',
+      topic: '.',
+      entity: '.',
+      newEle: '.',
+      QA: [],
     };
+    this.data = new Map();
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange(e) {
-    console.log(e.target.id);
-    this.setState({ [e.target.id]: e.target.value });
+    console.log(e);
+    // this.setState({ [e.target.id]: e.target.value });
   }
-  handleClick(e){
-    const { Q, A} = this.state;
-    this.props.onSubmit({textquestion:Q,textanswer:A});
-    this.setState({A:'',Q:''});
+
+  handleClick(e) {
+    this.setState(
+      state => ({
+        QA: [
+          {
+            id_topics_q_a: -1,
+            text_question: 'blank',
+            text_answer: 'blank',
+            topic_name: this.props.topic,
+            entity_name: this.props.entity,
+          },
+          ...state.QA,
+        ],
+      }),
+      () => {
+        console.log(this.state.QA);
+      }
+    );
+    // const { Q, A } = this.state;
+    // this.props.onSubmit({ textquestion: Q, textanswer: A });
+    // this.setState({ A: '', Q: '' });
   }
+
+  componentWillReceiveProps(props) {
+    const { chatbot, topic, entity, newEle } = props;
+    console.log('??? in QA');
+    // console.log(chatbot, topic, entity);
+    if (chatbot != '.' && topic != '.' && entity != '.')
+      if (
+        !(
+          chatbot == this.state.chatbot &&
+          topic == this.state.topic &&
+          entity == this.state.entity &&
+          newEle == this.state.newEle
+        )
+      )
+        PostApi(`${ip.server}/textquestions/listquestions`, {
+          chatbotname: chatbot,
+          topicname: topic,
+          entityname: entity,
+        })
+          .then(res => {
+            console.log('in QA PostApi');
+            console.log(res);
+            if (Array.isArray(res)) {
+              this.setState({ QA: res, chatbot, topic, entity, newEle });
+              for (let i = 0; i < res.length; i++) {
+                this.data.set(res[i].id_topics_q_a, res[i]);
+              }
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+  }
+
   render() {
     const { classes } = this.props;
-    const { Q, A } = this.state;
+    const { QA } = this.state;
+
     return (
       <div>
         <Card>
@@ -46,28 +105,6 @@ class QA extends React.Component {
             <h4 className={classes.cardTitleWhite}>Question - Answer</h4>
           </CardHeader>
           <CardBody>
-            <TextField
-              required
-              id="Q"
-              label="Q.."
-              margin="normal"
-              variant="outlined"
-              fullWidth
-              multiline
-              value={Q}
-              onChange={this.handleChange}
-            />
-            <TextField
-              required
-              multiline
-              fullWidth
-              id="A"
-              label="A.."
-              margin="normal"
-              variant="outlined"
-              value={A}
-              onChange={this.handleChange}
-            />
             <Grid
               container
               direction="row"
@@ -86,6 +123,17 @@ class QA extends React.Component {
                 </Fab>
               </Grid>
             </Grid>
+            {QA.sort((a, b) => a.id_topics_q_a < b.id_topics_q_a).map(val => {
+              console.log(val);
+              return (
+                <InputQA
+                  id_topics_q_a={val.id_topics_q_a}
+                  text_question={val.text_question}
+                  text_answer={val.text_answer}
+                  onChange={this.handleChange}
+                />
+              );
+            })}
           </CardBody>
         </Card>
       </div>

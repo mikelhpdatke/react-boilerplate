@@ -97,7 +97,7 @@ class ListQA extends React.Component {
           newEle == this.props.newEle
         )
       )
-        PostApi(`${ip.server}/textdbtoaimlconverter/listquestions`, {
+        PostApi(`${ip.server}/textquestions/listquestions`, {
           chatbotname: chatbot,
           topicname: topic,
           entityname: entity,

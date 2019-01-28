@@ -83,7 +83,7 @@ class TableList extends React.Component {
           username: null,
         },
       ],
-      listTopic:[{ id_topic: 17, topic_name: 'câu hỏi chung' }],
+      listTopic: [{ id_topic: 17, topic_name: 'câu hỏi chung' }],
       topic: '.',
       onSubmit: false,
       statusSubmit: -1,
@@ -94,7 +94,7 @@ class TableList extends React.Component {
   componentWillMount() {
     PostApi(`${ip.server}/chatbots`, {})
       .then(res => {
-        //console.log(res);
+        // console.log(res);
         if (Array.isArray(res)) this.setState({ listChatBot: res });
       })
       .catch(err => {
@@ -107,8 +107,8 @@ class TableList extends React.Component {
       .catch(err => {
         console.log(err);
       });
-   
   }
+
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
