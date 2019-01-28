@@ -13,9 +13,10 @@ import GridItem from 'components/Grid/GridItem.jsx';
 
 // component
 import QAForm from 'components/QA/QA.jsx';
-import SelectForm from 'components/QA/SelectForm.jsx';
+// import SelectForm from 'components/QA/SelectForm.jsx';
 import Steppers from 'components/QA/Steppers.jsx';
 // import ListQA from 'components/QA/ListQA.jsx';
+import QueryForm from 'components/QA/QueryForm.jsx';
 
 const style = theme => ({
   formControl: {
@@ -159,7 +160,7 @@ class TypographyPage extends React.Component {
         alignItems="center"
       >
         <Steppers/>
-        <SelectForm onChange={this.handleChange} />
+        <QueryForm/>
         <Grid item md={12} xs={12}>
           <QAForm
             newEle={newEle}
