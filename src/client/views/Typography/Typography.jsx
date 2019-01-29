@@ -15,7 +15,7 @@ import GridItem from 'components/Grid/GridItem.jsx';
 import QAForm from 'components/QA/QA.jsx';
 // import SelectForm from 'components/QA/SelectForm.jsx';
 import Steppers from 'components/QA/Steppers.jsx';
-// import ListQA from 'components/QA/ListQA.jsx';
+import ListQA from 'components/QA/ListQA.jsx';
 import QueryForm from 'components/QA/QueryForm.jsx';
 
 const style = theme => ({
@@ -159,10 +159,19 @@ class TypographyPage extends React.Component {
         justify="space-around"
         alignItems="center"
       >
-        <Steppers/>
-        <QueryForm/>
+        <Steppers />
+        <QueryForm />
         <Grid item md={12} xs={12}>
           <QAForm
+            newEle={newEle}
+            topic={topic}
+            entity={entity}
+            onSubmit={this.handleSubmit}
+            chatbot={chatbot}
+          />
+        </Grid>
+        <Grid item md={12} xs={12}>
+          <ListQA
             newEle={newEle}
             topic={topic}
             entity={entity}

@@ -1,8 +1,8 @@
 import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import TextField from '@material-ui/core/TextField';
+// import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+// import Paper from '@material-ui/core/Paper';
 import Fab from '@material-ui/core/Fab';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import { PostApi, ip } from '_helpers/Utils';
@@ -12,6 +12,9 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ListQAForm from 'components/QA/ListQAForm.jsx';
+import Card from 'components/Card/Card.jsx';
+import CardHeader from 'components/Card/CardHeader.jsx';
+import CardBody from 'components/Card/CardBody.jsx';
 
 const styles = theme => ({
   formControl: {
@@ -151,22 +154,13 @@ class ListQA extends React.Component {
     // console.log(this.props.QA);
     return (
       <div>
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography className={classes.heading}>Q/A</Typography>
-            <Typography className={classes.secondaryHeading}>
-              <Fab
-                size="small"
-                color="secondary"
-                aria-label="Add"
-                className={classes.margin}
-                onClick={this.handleSubmit}
-              >
-                <NavigationIcon />
-              </Fab>
-            </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+        <Card>
+          <CardHeader color="primary">
+            <h4 className={classes.cardTitleWhite}>
+              Recently Pattern-Template
+            </h4>
+          </CardHeader>
+          <CardBody>
             <Grid
               container
               direction="column"
@@ -184,8 +178,8 @@ class ListQA extends React.Component {
                 </Grid>
               ))}
             </Grid>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+          </CardBody>
+        </Card>
       </div>
     );
   }

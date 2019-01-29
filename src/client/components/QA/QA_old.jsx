@@ -4,12 +4,11 @@ import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import { PostApi, ip } from '_helpers/Utils';
 import withStyles from '@material-ui/core/styles/withStyles';
-// import TextField from '@material-ui/core/TextField';
-// import Grid from '@material-ui/core/Grid';
-// import GridItem from 'components/Grid/GridItem.jsx';
-// import Fab from '@material-ui/core/Fab';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import GridItem from 'components/Grid/GridItem.jsx';
+import Fab from '@material-ui/core/Fab';
 import InputQA from './InputQA.jsx';
-
 const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit,
@@ -21,13 +20,13 @@ class QA extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      id_topics_q_a: 'abc',
-      text_question: '123',
-      text_answer: 'zzz',
+      Q: '',
+      A: '',
       chatbot: '.',
       topic: '.',
       entity: '.',
       newEle: '.',
+      QA: [],
     };
     this.data = new Map();
     this.handleChange = this.handleChange.bind(this);
@@ -97,7 +96,8 @@ class QA extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { id_topics_q_a, text_question, text_answer } = this.state;
+    const { QA } = this.state;
+
     return (
       <div>
         <Card>
@@ -105,12 +105,35 @@ class QA extends React.Component {
             <h4 className={classes.cardTitleWhite}>Question - Answer</h4>
           </CardHeader>
           <CardBody>
-            <InputQA
-              id_topics_q_a={id_topics_q_a}
-              text_question={text_question}
-              text_answer={text_answer}
-              onChange={this.handleChange}
-            />
+            <Grid
+              container
+              direction="row"
+              justify="space-around"
+              alignItems="center"
+            >
+              <Grid item>
+                <Fab
+                  variant="extended"
+                  aria-label="Delete"
+                  color="primary"
+                  className={classes.fab}
+                  onClick={this.handleClick}
+                >
+                  Add
+                </Fab>
+              </Grid>
+            </Grid>
+            {QA.sort((a, b) => a.id_topics_q_a < b.id_topics_q_a).map(val => {
+              console.log(val);
+              return (
+                <InputQA
+                  id_topics_q_a={val.id_topics_q_a}
+                  text_question={val.text_question}
+                  text_answer={val.text_answer}
+                  onChange={this.handleChange}
+                />
+              );
+            })}
           </CardBody>
         </Card>
       </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   formControl: {
@@ -37,11 +38,11 @@ class InputQA extends React.Component {
         justify="space-around"
         alignItems="center"
       >
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <TextField
             required
             id="text_question"
-            label="text_question"
+            label="Pattern"
             margin="normal"
             variant="outlined"
             fullWidth
@@ -50,18 +51,23 @@ class InputQA extends React.Component {
             onChange={this.handleChange}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <TextField
             required
             multiline
             fullWidth
             id="text_answer"
-            label="text_answer"
+            label="Template"
             margin="normal"
             variant="outlined"
             value={text_answer}
             onChange={this.handleChange}
           />
+        </Grid>
+        <Grid item>
+          <Button variant="contained" color="primary">
+            Send
+          </Button>
         </Grid>
       </Grid>
     );
