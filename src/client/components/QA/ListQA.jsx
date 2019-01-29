@@ -80,7 +80,7 @@ class ListQA extends React.Component {
       topic: '.',
       entity: '.',
       newEle: '.',
-      QA: [],
+      arrTop10: props.arrTop10,
     };
     this.data = new Map();
     this.handleChange = this.handleChange.bind(this);
@@ -88,36 +88,8 @@ class ListQA extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    const { chatbot, topic, entity, newEle } = props;
-    console.log('???');
-    // console.log(chatbot, topic, entity);
-    if (chatbot != '.' && topic != '.' && entity != '.')
-      if (
-        !(
-          chatbot == this.props.chatbot &&
-          topic == this.props.topic &&
-          entity == this.props.entity &&
-          newEle == this.props.newEle
-        )
-      )
-        PostApi(`${ip.server}/textquestions/listquestions`, {
-          chatbotname: chatbot,
-          topicname: topic,
-          entityname: entity,
-        })
-          .then(res => {
-            console.log('in ListQA PostApi');
-            console.log(res);
-            if (Array.isArray(res)) {
-              this.setState({ QA: res });
-              for (let i = 0; i < res.length; i++) {
-                this.data.set(res[i].id_topics_q_a, res[i]);
-              }
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
+    const { arrTop10 } = props;
+    this.setState({arrTop10});
   }
 
   handleSubmit(e) {
@@ -148,9 +120,9 @@ class ListQA extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { QA } = this.state;
+    const { arrTop10 } = this.state;
     console.log('in listQA render');
-    console.log(QA);
+    console.log(arrTop10);
     // console.log(this.props.QA);
     return (
       <div>
@@ -167,12 +139,12 @@ class ListQA extends React.Component {
               justify="center"
               alignItems="center"
             >
-              {QA.map(val => (
+              {arrTop10.map(val => (
                 <Grid item>
                   <ListQAForm
                     id_topics_q_a={val.id_topics_q_a}
-                    text_question={val.text_question}
-                    text_answer={val.text_answer}
+                    text_question={val.aiml_question}
+                    text_answer={val.aiml_answer}
                     onChange={this.handleChange}
                   />
                 </Grid>

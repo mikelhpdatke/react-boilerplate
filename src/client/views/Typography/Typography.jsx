@@ -178,10 +178,7 @@ class TypographyPage extends React.Component {
         </Grid>
         <Grid item md={12} xs={12}>
           <ListQA
-            newEle={newEle}
-            topic={topic}
-            entity={entity}
-            chatbot={chatbot}
+            arrTop10={this.state.arrTop10}
           />
         </Grid>
       </Grid>
