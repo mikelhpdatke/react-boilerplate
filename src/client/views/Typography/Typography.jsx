@@ -83,10 +83,15 @@ class TypographyPage extends React.Component {
       entity: '.',
       chatbot: '.',
       onSubmit: false,
+      queryFormTextQuestion: '',
+      pattern:'',
+      template:'',
+      arrTop10:[],
     };
     this.data = new Map();
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDoneStep = this.handleDoneStep.bind(this);
   }
 
   handleDelete = data => () => {
@@ -103,48 +108,45 @@ class TypographyPage extends React.Component {
     this.setState({ chatbot, entity, topic });
   }
 
-  handleSubmit(obj) {
-    if ('id_topics_q_a' in obj) {
-      console.log('in Typographyyyyy');
-      console.log(obj);
-    } else {
-      const { textanswer, textquestion } = obj;
-      const {
-        topic: topicname,
-        entity: entityname,
-        chatbot: chatbotname,
-      } = this.state;
-      PostApi(`${ip.server}/textquestions/addquestions`, {
-        textquestion,
-        textanswer,
-        topicname,
-        entityname,
-        chatbotname,
+  handleSubmit({text_question}, callBack) {
+    // callBack('wtf');
+    
+    PostApi(`${ip.server}/aimlquestions/getaimlfromtext`, {
+      textquestion:text_question,
+    })
+      .then(res => {
+        // console.log('in post api done step.....');
+        console.log(res);
+        callBack(res)
+        // this.setState({ newEle: res });
       })
-        .then(res => {
-          console.log('in add Typo.....');
-          console.log(res);
-          this.setState({ newEle: res });
-          // window.location.reload();
-          /*
-          if (Array.isArray(res))
-            this.setState(state => ({
-              QA: [
-                ...state.QA,
-                {
-                  id_topics_q_a: res,
-                  textanswer,
-                  textquestion,
-                },
-              ],
-            }));
-            */
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-    // console.log(obj);
+      .catch(err => {
+        console.log(err);
+      });
+      
+  }
+
+  handleDoneStep({ topic: topicname, chatbot: chatbotname }) {
+    // console.log(topic, chatbot);
+    this.setState({ topic:topicname, chatbot:chatbotname });
+    PostApi(`${ip.server}/aimlquestions/listtop10`, {
+      topicname,
+      chatbotname,
+    })
+      .then(res => {
+        //console.log('in post api done step.....');
+        console.log(res);
+        if (Array.isArray(res)) {
+          this.setState({ arrTop10: res });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  handleMatch() {
+    this.setState({queryFormTextQuestion:'', pattern:''});
   }
 
   render() {
@@ -159,8 +161,12 @@ class TypographyPage extends React.Component {
         justify="space-around"
         alignItems="center"
       >
-        <Steppers />
-        <QueryForm />
+        <Steppers onDoneStep={this.handleDoneStep} />
+        <QueryForm
+          text_question={this.state.queryFormTextQuestion}
+          onSubmit={this.handleSubmit}
+          topic={this.state.topic}
+        />
         <Grid item md={12} xs={12}>
           <QAForm
             newEle={newEle}
@@ -175,7 +181,6 @@ class TypographyPage extends React.Component {
             newEle={newEle}
             topic={topic}
             entity={entity}
-            onSubmit={this.handleSubmit}
             chatbot={chatbot}
           />
         </Grid>

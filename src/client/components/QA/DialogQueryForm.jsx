@@ -12,6 +12,7 @@ import Dialog from '@material-ui/core/Dialog';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { PostApi, ip } from '_helpers/Utils';
 
 const options = [
   'None',
@@ -35,6 +36,8 @@ class ConfirmationDialogRaw extends React.Component {
     super();
     this.state = {
       value: props.value,
+      topic:props.topic,
+      arr:[],
     };
   }
 
@@ -43,6 +46,8 @@ class ConfirmationDialogRaw extends React.Component {
     if (nextProps.value !== this.props.value) {
       this.setState({ value: nextProps.value });
     }
+    // console.log(nextProps);
+    this.setState({arr:nextProps.arrDialogs})
   }
 
   handleEntering = () => {
@@ -84,7 +89,7 @@ class ConfirmationDialogRaw extends React.Component {
             value={this.state.value}
             onChange={this.handleChange}
           >
-            {options.map(option => (
+            {this.state.arr.map(option => (
               <FormControlLabel value={option} key={option} control={<Radio />} label={option} />
             ))}
           </RadioGroup>

@@ -30,26 +30,32 @@ function getSteps() {
 }
 
 class HorizontalLabelPositionBelowStepper extends React.Component {
-  state = {
-    activeStep: 0,
-    listChatBot: [],
-    listTopic:[],
-    topic:'',
-    chatbot:'',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeStep: 0,
+      listChatBot: [],
+      listTopic: [],
+      topic: '',
+      chatbot: '',
+    };
+    this.handleDoneStep = this.handleDoneStep.bind(this);
+  }
 
   handleChange = event => {
-    //console.log(event.target.name);
-    
+    // console.log(event.target.name);
+
     this.setState({ [event.target.name]: event.target.value }, () => {
-      if (event.target.name == 'chatbot'){
-        PostApi(`${ip.server}/topics/getbychatbotname`, {chatbotname:event.target.value})
-        .then(res => {
-          if (Array.isArray(res)) this.setState({ listTopic: res });
+      if (event.target.name == 'chatbot') {
+        PostApi(`${ip.server}/topics/getbychatbotname`, {
+          chatbotname: event.target.value,
         })
-        .catch(err => {
-          console.log(err);
-        });
+          .then(res => {
+            if (Array.isArray(res)) this.setState({ listTopic: res });
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
     });
   };
@@ -83,6 +89,11 @@ class HorizontalLabelPositionBelowStepper extends React.Component {
       });
   }
 
+  handleDoneStep() {
+    const { topic, chatbot } = this.state;
+    this.props.onDoneStep({ topic, chatbot });
+  }
+
   render() {
     const { classes } = this.props;
     const steps = getSteps();
@@ -102,16 +113,20 @@ class HorizontalLabelPositionBelowStepper extends React.Component {
                     onChange={this.handleChange}
                     style={{ minWidth: 100 }}
                     inputProps={{
-                      name: index == 0 ? 'chatbot' :'topic',
-                      id: index == 0 ? 'chatbot' :'topic',
+                      name: index == 0 ? 'chatbot' : 'topic',
+                      id: index == 0 ? 'chatbot' : 'topic',
                     }}
                   >
                     {index == 0
                       ? this.state.listChatBot.map(val => (
-                          <MenuItem value={val.chatbot_name}>{val.chatbot_name}</MenuItem>
+                          <MenuItem value={val.chatbot_name}>
+                            {val.chatbot_name}
+                          </MenuItem>
                         ))
                       : this.state.listTopic.map(val => (
-                          <MenuItem value={val.topic_name}>{val.topic_name}</MenuItem>
+                          <MenuItem value={val.topic_name}>
+                            {val.topic_name}
+                          </MenuItem>
                         ))}
                   </Select>
                 </FormControl>
@@ -137,7 +152,11 @@ class HorizontalLabelPositionBelowStepper extends React.Component {
                 </Button>
               </Grid>
               <Grid item>
-                <Button variant="contained" color="primary">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={this.handleDoneStep}
+                >
                   Submit
                 </Button>
               </Grid>
