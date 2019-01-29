@@ -19,8 +19,11 @@ export async function PostApi(url, json) {
   // console.log(myRequest.body);
   const result = fetch(myRequest)
     .then(response => {
+      // console.log('in resssss');
       // console.log(response);
       if (response.status === 200) {
+        // console.log('??clgttt');
+        // console.log(response.text());
         return response.json();
       }
       console.log('err');

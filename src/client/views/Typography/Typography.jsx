@@ -110,12 +110,13 @@ class TypographyPage extends React.Component {
 
   handleSubmit({text_question}, callBack) {
     // callBack('wtf');
-    
+    console.log('wtf');
+    console.log(text_question);
     PostApi(`${ip.server}/aimlquestions/getaimlfromtext`, {
       textquestion:text_question,
     })
       .then(res => {
-        // console.log('in post api done step.....');
+        console.log('in post api typoHandle Submit.....');
         console.log(res);
         callBack(res)
         // this.setState({ newEle: res });
