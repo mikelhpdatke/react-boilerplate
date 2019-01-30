@@ -6,7 +6,8 @@ import { Switch, Route, Router } from 'react-router-dom';
 // import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import indexRoutes from "routes/index.jsx";
+import indexRoutes from 'routes/index.jsx';
+import { ToastProvider } from 'react-toast-notifications';
 import Home from './Home/Home';
 // import PermanentDrawerLeft from './AdminManagement/ManageUser';
 // import Setting from './SettingManagement/Setting';
@@ -33,27 +34,29 @@ class App extends React.Component {
 
     return (
       <div>
-        <div>
+        <ToastProvider placement="bottom-right">
           <div>
-            {alert.message && (
-              <div className={`alert ${alert.type}`}>{alert.message}</div>
-            )}
-            <Router history={history}>
-              <Switch>
-                {indexRoutes.map((prop, key) => {
-                  console.log(prop);
-                  return (
-                    <Route
-                      path={prop.path}
-                      component={prop.component}
-                      key={key}
-                    />
-                  );
-                })}
-              </Switch>
-            </Router>
+            <div>
+              {alert.message && (
+                <div className={`alert ${alert.type}`}>{alert.message}</div>
+              )}
+              <Router history={history}>
+                <Switch>
+                  {indexRoutes.map((prop, key) => {
+                    console.log(prop);
+                    return (
+                      <Route
+                        path={prop.path}
+                        component={prop.component}
+                        key={key}
+                      />
+                    );
+                  })}
+                </Switch>
+              </Router>
+            </div>
           </div>
-        </div>
+        </ToastProvider>
       </div>
     );
   }

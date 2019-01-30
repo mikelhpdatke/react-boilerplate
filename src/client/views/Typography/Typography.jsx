@@ -2,11 +2,12 @@ import React from 'react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 // core components
+import { withToastManager } from 'react-toast-notifications';
 
 import { PostApi, ip } from '_helpers/Utils';
 // import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
-import GridItem from 'components/Grid/GridItem.jsx';
+// import GridItem from 'components/Grid/GridItem.jsx';
 // import Input from '@material-ui/core/Input';
 // import OutlinedInput from '@material-ui/core/OutlinedInput';
 // import FilledInput from '@material-ui/core/FilledInput';
@@ -97,6 +98,22 @@ class TypographyPage extends React.Component {
     this.handleSend = this.handleSend.bind(this);
   }
 
+  notiError = () => {
+    this.props.toastManager.add(`Something went wrong, pls try again`, {
+      appearance: 'error',
+      autoDismiss : true,
+      autoDismissTimeout: 3000,
+    });
+  };
+
+  notiSucess = (text) => {
+    this.props.toastManager.add(text, {
+      appearance: 'success',
+      autoDismiss : true,
+      autoDismissTimeout: 3000,
+    });
+  };
+
   handleDelete = data => () => {
     if (data.label === 'React') {
       alert('Why would you want to delete React?! :)'); // eslint-disable-line no-alert
@@ -145,43 +162,52 @@ class TypographyPage extends React.Component {
         console.log(res);
         if (Array.isArray(res)) {
           this.setState({ arrTop10: res });
+          this.notiSucess('Load data ok!');
         }
       })
       .catch(err => {
         console.log(err);
+        this.notiError();
       });
   }
 
   handleMatch() {
-    this.setState({ queryFormTextQuestion: '', pattern: '', template: '' });
+    this.setState({ queryFormTextQuestion: '', pattern: '', template: '' }, () => {
+      this.notiSucess('Câu hỏi đã trùng, nhập câu khác!!');
+      
+    });
   }
 
   handleNotMatch() {
     console.log('in typo Not Match');
+    this.notiSucess('Câu hỏi không bị trùng. Hãy nhập câu trả lời ở mục Pattern - Template');
   }
 
-  handleSend({pattern, template}){
-    const {topic:topicname} = this.state;
+  handleSend({ pattern, template }) {
+    const { topic: topicname } = this.state;
     PostApi(`${ip.server}/aimlquestions/add`, {
       topicname,
-      aimquestion  :pattern,
-      aimlanswer :template
+      aimlquestion: pattern,
+      aimlanswer: template,
     })
       .then(res => {
         // console.log('in post api done step.....');
-        console.log(res);
+        //console.log(res);
+        this.notiSucess('Gửi dữ liệu thành công!!!');
+        this.setState({ queryFormTextQuestion: '', pattern: '', template: '' });
         // if (Array.isArray(res)) {
         //  this.setState({ arrTop10: res });
         // }
       })
       .catch(err => {
+        this.notiError();
         console.log(err);
       });
   }
 
   render() {
-    const { classes } = this.props;
-    const { topic, entity, chatbot, listEntity, onSubmit, newEle } = this.state;
+    // const { classes, toastManager  } = this.props;
+    // const { topic, entity, chatbot, listEntity, onSubmit, newEle } = this.state;
     // console.log('in Typograpy')
     // console.log(QA);
     return (
@@ -200,7 +226,11 @@ class TypographyPage extends React.Component {
           onNotMatch={this.handleNotMatch}
         />
         <Grid item md={12} xs={12}>
-          <QAForm pattern={this.state.pattern} template={this.state.template} onSend={this.handleSend} />
+          <QAForm
+            pattern={this.state.pattern}
+            template={this.state.template}
+            onSend={this.handleSend}
+          />
         </Grid>
         <Grid item md={12} xs={12}>
           <ListQA arrTop10={this.state.arrTop10} />
@@ -210,4 +240,4 @@ class TypographyPage extends React.Component {
   }
 }
 
-export default withStyles(style)(TypographyPage);
+export default withToastManager(withStyles(style)(TypographyPage));

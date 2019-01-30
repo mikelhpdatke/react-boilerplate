@@ -2,7 +2,7 @@ import React from 'react';
 import Card from 'components/Card/Card.jsx';
 import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
-import { PostApi, ip } from '_helpers/Utils';
+// import { PostApi, ip } from '_helpers/Utils';
 import withStyles from '@material-ui/core/styles/withStyles';
 // import TextField from '@material-ui/core/TextField';
 // import Grid from '@material-ui/core/Grid';
@@ -36,7 +36,7 @@ class QA extends React.Component {
 
   handleSend({text_question : pattern, text_answer : template}){
     //console.log({pattern, template});
-    this.props.onSend({pattern, template})
+    this.props.onSend({ pattern, template });
   }
 
   componentWillReceiveProps(props) {
