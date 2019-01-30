@@ -119,12 +119,15 @@ class HorizontalLabelPositionBelowStepper extends React.Component {
                   >
                     {index == 0
                       ? this.state.listChatBot.map(val => (
-                          <MenuItem value={val.chatbot_name}>
+                          <MenuItem
+                            value={val.chatbot_name}
+                            key={val.topic_name}
+                          >
                             {val.chatbot_name}
                           </MenuItem>
                         ))
                       : this.state.listTopic.map(val => (
-                          <MenuItem value={val.topic_name}>
+                          <MenuItem value={val.topic_name} key={val.topic_name}>
                             {val.topic_name}
                           </MenuItem>
                         ))}

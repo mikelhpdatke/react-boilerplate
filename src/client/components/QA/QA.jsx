@@ -22,16 +22,11 @@ class QA extends React.Component {
     super(props);
     this.state = {
       id_topics_q_a: 'abc',
-      text_question: '123',
-      text_answer: 'zzz',
-      chatbot: '.',
-      topic: '.',
-      entity: '.',
-      newEle: '.',
+      pattern: props.pattern,
+      template: '',
     };
-    this.data = new Map();
     this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.handleSend = this.handleSend.bind(this);
   }
 
   handleChange(e) {
@@ -39,77 +34,33 @@ class QA extends React.Component {
     // this.setState({ [e.target.id]: e.target.value });
   }
 
-  handleClick(e) {
-    this.setState(
-      state => ({
-        QA: [
-          {
-            id_topics_q_a: -1,
-            text_question: 'blank',
-            text_answer: 'blank',
-            topic_name: this.props.topic,
-            entity_name: this.props.entity,
-          },
-          ...state.QA,
-        ],
-      }),
-      () => {
-        console.log(this.state.QA);
-      }
-    );
-    // const { Q, A } = this.state;
-    // this.props.onSubmit({ textquestion: Q, textanswer: A });
-    // this.setState({ A: '', Q: '' });
+  handleSend({text_question : pattern, text_answer : template}){
+    //console.log({pattern, template});
+    this.props.onSend({pattern, template})
   }
 
   componentWillReceiveProps(props) {
-    const { chatbot, topic, entity, newEle } = props;
-    console.log('??? in QA');
-    // console.log(chatbot, topic, entity);
-    if (chatbot != '.' && topic != '.' && entity != '.')
-      if (
-        !(
-          chatbot == this.state.chatbot &&
-          topic == this.state.topic &&
-          entity == this.state.entity &&
-          newEle == this.state.newEle
-        )
-      )
-        PostApi(`${ip.server}/textquestions/listquestions`, {
-          chatbotname: chatbot,
-          topicname: topic,
-          entityname: entity,
-        })
-          .then(res => {
-            console.log('in QA PostApi');
-            console.log(res);
-            if (Array.isArray(res)) {
-              this.setState({ QA: res, chatbot, topic, entity, newEle });
-              for (let i = 0; i < res.length; i++) {
-                this.data.set(res[i].id_topics_q_a, res[i]);
-              }
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
+    // console.log(props);
+    if (this.state.pattern != props.pattern)
+      this.setState({ pattern: props.pattern, template: props.template });
   }
 
   render() {
     const { classes } = this.props;
-    const { id_topics_q_a, text_question, text_answer } = this.state;
+    const { pattern, template, id_topics_q_a } = this.state;
     return (
       <div>
         <Card>
           <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Question - Answer</h4>
+            <h4 className={classes.cardTitleWhite}>Pattern - Template</h4>
           </CardHeader>
           <CardBody>
             <InputQA
               id_topics_q_a={id_topics_q_a}
-              text_question={text_question}
-              text_answer={text_answer}
+              text_question={pattern}
+              text_answer={template}
               onChange={this.handleChange}
+              onSend={this.handleSend}
             />
           </CardBody>
         </Card>

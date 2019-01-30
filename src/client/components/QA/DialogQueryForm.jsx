@@ -36,8 +36,8 @@ class ConfirmationDialogRaw extends React.Component {
     super();
     this.state = {
       value: props.value,
-      topic:props.topic,
-      arr:[],
+      topic: props.topic,
+      arr: [],
     };
   }
 
@@ -47,7 +47,8 @@ class ConfirmationDialogRaw extends React.Component {
       this.setState({ value: nextProps.value });
     }
     // console.log(nextProps);
-    this.setState({arr:nextProps.arrDialogs})
+    if (this.state.arr != nextProps.arrdialogs)
+      this.setState({ arr: nextProps.arrdialogs });
   }
 
   handleEntering = () => {
@@ -90,7 +91,12 @@ class ConfirmationDialogRaw extends React.Component {
             onChange={this.handleChange}
           >
             {this.state.arr.map(option => (
-              <FormControlLabel value={option} key={option} control={<Radio />} label={option} />
+              <FormControlLabel
+                value={option}
+                key={option}
+                control={<Radio />}
+                label={option}
+              />
             ))}
           </RadioGroup>
         </DialogContent>

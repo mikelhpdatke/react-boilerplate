@@ -16,26 +16,30 @@ class QueryForm extends React.Component {
       text_question: '',
       pattern: '',
       topic: '',
-      arrDialogs: [],
+      arrdialogs: [],
     };
     this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillReceiveProps(props) {
-    this.setState({ text_question: props.text_question, topic: props.topic });
+    const { text_question, topic } = this.state;
+    if (text_question != props.text_question || topic != props.topic)
+      this.setState({ text_question: props.text_question, topic: props.topic });
   }
 
   handleCloseDialog(value) {
     // console.log('???????');
     this.setState({ value, openDialog: false }, () => {
-      console.log(this.state);
+      if (value == undefined) return;
       if (value == 'None') {
         // xu ly khong trung
-        // this.props.onNotMatch({ text_question });
+        console.log('Khong trung');
+        this.props.onNotMatch(value);
       } else {
         // xu ly trung
-        // this.props.onMatch();
+        console.log('Trung');
+        this.props.onMatch(value);
       }
     });
   }
@@ -54,12 +58,12 @@ class QueryForm extends React.Component {
         topicname: this.state.topic,
       })
         .then(res => {
-          console.log('in post Query Form.....');
-          console.log(res);
+          // console.log('in post Query Form.....');
+          // console.log(res);
           if (Array.isArray(res)) {
             this.setState({
               pattern: data,
-              arrDialogs: ['None', ...res.map(val => val.aiml_question)],
+              arrdialogs: ['None', ...res.map(val => val.aiml_question)],
               openDialog: true,
             });
           }
@@ -110,7 +114,7 @@ class QueryForm extends React.Component {
           onClose={this.handleCloseDialog}
           pattern={this.state.pattern}
           topic={this.state.topic}
-          arrDialogs={this.state.arrDialogs}
+          arrdialogs={this.state.arrdialogs}
         />
       </React.Fragment>
     );

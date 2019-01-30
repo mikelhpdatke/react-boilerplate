@@ -89,19 +89,19 @@ class ListQA extends React.Component {
 
   componentWillReceiveProps(props) {
     const { arrTop10 } = props;
-    this.setState({arrTop10});
+    if (arrTop10 != this.state.arrTop10) this.setState({ arrTop10 });
   }
 
   handleSubmit(e) {
-    console.log('in submit');
-    console.log(this.data);
+    // console.log('in submit');
+    // console.log(this.data);
     this.props.onSubmit(this.data);
   }
 
   // eslint-disable-next-line class-methods-use-this
   handleChange(e) {
     this.data.set(e.id_topics_q_a, e);
-    console.log(this.data);
+    // console.log(this.data);
     /*
     const { QA } = this.state;
     for (let i = 0; i < QA.length; i++)
@@ -121,8 +121,8 @@ class ListQA extends React.Component {
   render() {
     const { classes } = this.props;
     const { arrTop10 } = this.state;
-    console.log('in listQA render');
-    console.log(arrTop10);
+    // console.log('in listQA render');
+    // console.log(arrTop10);
     // console.log(this.props.QA);
     return (
       <div>
@@ -140,7 +140,7 @@ class ListQA extends React.Component {
               alignItems="center"
             >
               {arrTop10.map(val => (
-                <Grid item>
+                <Grid item key={val.id_topics_q_a}>
                   <ListQAForm
                     id_topics_q_a={val.id_topics_q_a}
                     text_question={val.aiml_question}

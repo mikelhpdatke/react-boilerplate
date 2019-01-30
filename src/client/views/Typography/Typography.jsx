@@ -84,14 +84,17 @@ class TypographyPage extends React.Component {
       chatbot: '.',
       onSubmit: false,
       queryFormTextQuestion: '',
-      pattern:'',
-      template:'',
-      arrTop10:[],
+      pattern: '',
+      template: '',
+      arrTop10: [],
     };
     this.data = new Map();
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDoneStep = this.handleDoneStep.bind(this);
+    this.handleMatch = this.handleMatch.bind(this);
+    this.handleNotMatch = this.handleNotMatch.bind(this);
+    this.handleSend = this.handleSend.bind(this);
   }
 
   handleDelete = data => () => {
@@ -108,34 +111,37 @@ class TypographyPage extends React.Component {
     this.setState({ chatbot, entity, topic });
   }
 
-  handleSubmit({text_question}, callBack) {
+  handleSubmit({ text_question }, callBack) {
     // callBack('wtf');
     console.log('wtf');
     console.log(text_question);
+    this.setState({ queryFormTextQuestion: text_question });
     PostApi(`${ip.server}/aimlquestions/getaimlfromtext`, {
-      textquestion:text_question,
+      textquestion: text_question,
     })
       .then(res => {
         console.log('in post api typoHandle Submit.....');
         console.log(res);
-        callBack(res)
+        this.setState({ pattern: res }, () => {
+          console.log('in pyto pattern set state', res);
+        });
+        callBack(res);
         // this.setState({ newEle: res });
       })
       .catch(err => {
         console.log(err);
       });
-      
   }
 
   handleDoneStep({ topic: topicname, chatbot: chatbotname }) {
     // console.log(topic, chatbot);
-    this.setState({ topic:topicname, chatbot:chatbotname });
+    this.setState({ topic: topicname, chatbot: chatbotname });
     PostApi(`${ip.server}/aimlquestions/listtop10`, {
       topicname,
       chatbotname,
     })
       .then(res => {
-        //console.log('in post api done step.....');
+        // console.log('in post api done step.....');
         console.log(res);
         if (Array.isArray(res)) {
           this.setState({ arrTop10: res });
@@ -147,7 +153,30 @@ class TypographyPage extends React.Component {
   }
 
   handleMatch() {
-    this.setState({queryFormTextQuestion:'', pattern:''});
+    this.setState({ queryFormTextQuestion: '', pattern: '', template: '' });
+  }
+
+  handleNotMatch() {
+    console.log('in typo Not Match');
+  }
+
+  handleSend({pattern, template}){
+    const {topic:topicname} = this.state;
+    PostApi(`${ip.server}/aimlquestions/add`, {
+      topicname,
+      aimquestion  :pattern,
+      aimlanswer :template
+    })
+      .then(res => {
+        // console.log('in post api done step.....');
+        console.log(res);
+        // if (Array.isArray(res)) {
+        //  this.setState({ arrTop10: res });
+        // }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -167,20 +196,14 @@ class TypographyPage extends React.Component {
           text_question={this.state.queryFormTextQuestion}
           onSubmit={this.handleSubmit}
           topic={this.state.topic}
+          onMatch={this.handleMatch}
+          onNotMatch={this.handleNotMatch}
         />
         <Grid item md={12} xs={12}>
-          <QAForm
-            newEle={newEle}
-            topic={topic}
-            entity={entity}
-            onSubmit={this.handleSubmit}
-            chatbot={chatbot}
-          />
+          <QAForm pattern={this.state.pattern} template={this.state.template} onSend={this.handleSend} />
         </Grid>
         <Grid item md={12} xs={12}>
-          <ListQA
-            arrTop10={this.state.arrTop10}
-          />
+          <ListQA arrTop10={this.state.arrTop10} />
         </Grid>
       </Grid>
     );

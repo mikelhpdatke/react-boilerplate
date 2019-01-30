@@ -20,12 +20,26 @@ class InputQA extends React.Component {
       text_answer: props.text_answer,
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleSend = this.handleSend.bind(this);
     // this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange(e) {
     console.log(e.target.id);
     this.setState({ [e.target.id]: e.target.value });
+  }
+
+  handleSend(){
+    const { text_answer, text_question } = this.state;
+    this.props.onSend({text_question, text_answer});
+  }
+  componentWillReceiveProps({ text_question, text_answer, id_topics_q_a }) {
+    if (
+      text_question != this.state.text_question ||
+      text_answer != this.state.text_answer ||
+      id_topics_q_a != this.state.id_topics_q_a
+    )
+      this.setState({ text_answer, text_question, id_topics_q_a });
   }
 
   render() {
@@ -65,7 +79,7 @@ class InputQA extends React.Component {
           />
         </Grid>
         <Grid item>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={this.handleSend}>
             Send
           </Button>
         </Grid>
