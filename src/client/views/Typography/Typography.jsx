@@ -98,18 +98,19 @@ class TypographyPage extends React.Component {
     this.handleSend = this.handleSend.bind(this);
   }
 
-  notiError = () => {
-    this.props.toastManager.add(`Something went wrong, pls try again`, {
-      appearance: 'error',
-      autoDismiss : true,
-      autoDismissTimeout: 3000,
-    });
+  notiError = text => {
+    this.props.toastManager.add(`Something went wrong, pls try again..${  text}`, {
+        appearance: 'error',
+        autoDismiss: true,
+        autoDismissTimeout: 3000,
+      }
+    );
   };
 
-  notiSucess = (text) => {
+  notiSucess = text => {
     this.props.toastManager.add(text, {
       appearance: 'success',
-      autoDismiss : true,
+      autoDismiss: true,
       autoDismissTimeout: 3000,
     });
   };
@@ -172,15 +173,19 @@ class TypographyPage extends React.Component {
   }
 
   handleMatch() {
-    this.setState({ queryFormTextQuestion: '', pattern: '', template: '' }, () => {
-      this.notiSucess('Câu hỏi đã trùng, nhập câu khác!!');
-      
-    });
+    this.setState(
+      { queryFormTextQuestion: '', pattern: '', template: '' },
+      () => {
+        this.notiSucess('Câu hỏi đã trùng, nhập câu khác!!');
+      }
+    );
   }
 
   handleNotMatch() {
     console.log('in typo Not Match');
-    this.notiSucess('Câu hỏi không bị trùng. Hãy nhập câu trả lời ở mục Pattern - Template');
+    this.notiSucess(
+      'Câu hỏi không bị trùng. Hãy nhập câu trả lời ở mục Pattern - Template'
+    );
   }
 
   handleSend({ pattern, template }) {
@@ -192,7 +197,8 @@ class TypographyPage extends React.Component {
     })
       .then(res => {
         // console.log('in post api done step.....');
-        //console.log(res);
+        console.log(res);
+        if ('error' in res) throw res;
         this.notiSucess('Gửi dữ liệu thành công!!!');
         this.setState({ queryFormTextQuestion: '', pattern: '', template: '' });
         // if (Array.isArray(res)) {
@@ -200,7 +206,7 @@ class TypographyPage extends React.Component {
         // }
       })
       .catch(err => {
-        this.notiError();
+        this.notiError('Lỗi!! có thể câu hỏi bị trùng');
         console.log(err);
       });
   }
