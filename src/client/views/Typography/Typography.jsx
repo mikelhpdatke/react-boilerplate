@@ -14,7 +14,7 @@ import Grid from '@material-ui/core/Grid';
 
 // component
 import QAForm from 'components/QA/QA.jsx';
-// import SelectForm from 'components/QA/SelectForm.jsx';
+import SelectForm from 'components/QA/SelectForm.jsx';
 import Steppers from 'components/QA/Steppers.jsx';
 import ListQA from 'components/QA/ListQA.jsx';
 import QueryForm from 'components/QA/QueryForm.jsx';
@@ -99,7 +99,9 @@ class TypographyPage extends React.Component {
   }
 
   notiError = text => {
-    this.props.toastManager.add(`Something went wrong, pls try again..${  text}`, {
+    this.props.toastManager.add(
+      `Something went wrong, pls try again..${text}`,
+      {
         appearance: 'error',
         autoDismiss: true,
         autoDismissTimeout: 3000,
@@ -162,8 +164,9 @@ class TypographyPage extends React.Component {
         // console.log('in post api done step.....');
         console.log(res);
         if (Array.isArray(res)) {
+          res.sort((a, b) => a.id_chatbot > b.id_chatbot);
           this.setState({ arrTop10: res });
-          this.notiSucess('Load data ok!');
+          this.notiSucess('Load data top 10 ok!');
         }
       })
       .catch(err => {
@@ -189,7 +192,7 @@ class TypographyPage extends React.Component {
   }
 
   handleSend({ pattern, template }) {
-    const { topic: topicname } = this.state;
+    const { topic: topicname, chatbot: chatbotname } = this.state;
     PostApi(`${ip.server}/aimlquestions/add`, {
       topicname,
       aimlquestion: pattern,
@@ -201,12 +204,29 @@ class TypographyPage extends React.Component {
         if ('error' in res) throw res;
         this.notiSucess('Gửi dữ liệu thành công!!!');
         this.setState({ queryFormTextQuestion: '', pattern: '', template: '' });
+        PostApi(`${ip.server}/aimlquestions/listtop10`, {
+          topicname,
+          chatbotname,
+        })
+          .then(res => {
+            // console.log('in post api done step.....');
+            console.log(res);
+            if (Array.isArray(res)) {
+              res.sort((a, b) => a.id_chatbot > b.id_chatbot);
+              this.setState({ arrTop10: res });
+              this.notiSucess('Load data top 10 ok!');
+            }
+          })
+          .catch(err => {
+            console.log(err);
+            this.notiError();
+          });
         // if (Array.isArray(res)) {
         //  this.setState({ arrTop10: res });
         // }
       })
       .catch(err => {
-        this.notiError('Lỗi!! có thể câu hỏi bị trùng');
+        this.notiError('Lỗi!! có thể câu hỏi bị trùngg');
         console.log(err);
       });
   }
@@ -223,7 +243,7 @@ class TypographyPage extends React.Component {
         justify="space-around"
         alignItems="center"
       >
-        <Steppers onDoneStep={this.handleDoneStep} />
+        <SelectForm onDoneStep={this.handleDoneStep} />
         <QueryForm
           text_question={this.state.queryFormTextQuestion}
           onSubmit={this.handleSubmit}

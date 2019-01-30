@@ -71,7 +71,6 @@ class App extends React.Component {
       <div className={classes.wrapper}>
         <Sidebar
           routes={dashboardRoutes}
-          logoText={"ChatBot"}
           logo={logo}
           image={image}
           handleDrawerToggle={this.handleDrawerToggle}

@@ -22,21 +22,8 @@ class SelectForm extends React.Component {
     this.state = {
       chatbot: '.',
       topic: '.',
-      entity: '.',
-      listChatBot: [
-        {
-          id_chatbot: 1,
-          chatbot_name: 'thái bình',
-          username: null,
-        },
-      ],
-      listTopic: [{ id_topic: 17, topic_name: 'câu hỏi chung' }],
-      listEntity: [
-        {
-          id_entity: 5,
-          entity_name: 'quần chúng',
-        },
-      ],
+      listChatBot: [],
+      listTopic: [],
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -44,22 +31,8 @@ class SelectForm extends React.Component {
   componentWillMount() {
     PostApi(`${ip.server}/chatbots`, {})
       .then(res => {
-        // console.log(res);
+        console.log(res);
         if (Array.isArray(res)) this.setState({ listChatBot: res });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    PostApi(`${ip.server}/topics`, {})
-      .then(res => {
-        if (Array.isArray(res)) this.setState({ listTopic: res });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    PostApi(`${ip.server}/entities`, {})
-      .then(res => {
-        if (Array.isArray(res)) this.setState({ listEntity: res });
       })
       .catch(err => {
         console.log(err);
@@ -67,23 +40,36 @@ class SelectForm extends React.Component {
   }
 
   handleChange(e) {
+    const { chatbot, topic } = this.state;
+    // console.log(e);
+    if (e.target.name == 'chatbot' && chatbot != e.target.value) {
+      PostApi(`${ip.server}/topics/getbychatbotname`, {
+        chatbotname: e.target.value,
+      })
+        .then(res => {
+          if (Array.isArray(res)) this.setState({ listTopic: res });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+
     this.setState({ [e.target.name]: e.target.value }, () => {
-      const { topic, entity, chatbot } = this.state;
-      this.props.onChange({ topic, entity, chatbot });
+      // console.log(chatbot, topic);
+      // console.log(this.state);
+      if (chatbot != this.state.chatbot || topic != this.state.topic)
+        if (this.state.chatbot != '.' && this.state.topic != '.')
+          this.props.onDoneStep({
+            topic: this.state.topic,
+            chatbot: this.state.chatbot,
+          });
     });
     // console.log(this.state);
   }
 
   render() {
     const { classes } = this.props;
-    const {
-      topic,
-      entity,
-      chatbot,
-      listChatBot,
-      listEntity,
-      listTopic,
-    } = this.state;
+    const { topic, chatbot, listChatBot, listTopic } = this.state;
     return (
       <React.Fragment>
         <GridItem>
@@ -117,24 +103,6 @@ class SelectForm extends React.Component {
             >
               {this.state.listTopic.map(val => (
                 <MenuItem value={val.topic_name}>{val.topic_name}</MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>Required</FormHelperText>
-          </FormControl>
-        </GridItem>
-        <GridItem>
-          <FormControl required className={classes.formControl}>
-            <InputLabel htmlFor="entity-required">Entity</InputLabel>
-            <Select
-              value={entity}
-              onChange={this.handleChange}
-              name="entity"
-              inputProps={{
-                id: 'entity-required',
-              }}
-            >
-              {listEntity.map(val => (
-                <MenuItem value={val.entity_name}>{val.entity_name}</MenuItem>
               ))}
             </Select>
             <FormHelperText>Required</FormHelperText>

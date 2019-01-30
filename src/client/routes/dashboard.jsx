@@ -19,52 +19,10 @@ import NotificationsPage from 'views/Notifications/Notifications.jsx';
 const dashboardRoutes = [
   {
     path: '/dashboard',
-    sidebarName: 'Dashboard',
-    navbarName: 'Material Dashboard',
-    icon: Dashboard,
-    component: DashboardPage,
-  },
-  {
-    path: '/user',
-    sidebarName: 'User Profile',
-    navbarName: 'Profile',
-    icon: Person,
-    component: UserProfile,
-  },
-  {
-    path: '/table',
     sidebarName: 'AIML',
     navbarName: 'AIML',
-    icon: 'content_paste',
-    component: AIML,
-  },
-  {
-    path: '/typography',
-    sidebarName: 'Typography',
-    navbarName: 'Typography',
-    icon: LibraryBooks,
+    icon: Dashboard,
     component: Typography,
-  },
-  {
-    path: '/icons',
-    sidebarName: 'Icons',
-    navbarName: 'Icons',
-    icon: BubbleChart,
-    component: Icons,
-  },
-  {
-    path: '/maps',
-    sidebarName: 'Maps',
-    navbarName: 'Map',
-    icon: LocationOn,
-    component: Maps,
-  },
-  {
-    path: '/notifications',
-    sidebarName: 'Notifications',
-    navbarName: 'Notifications',
-    icon: Notifications,
-    component: NotificationsPage,
   },
   { redirect: true, path: '/', to: '/dashboard', navbarName: 'Redirect' },
 ];
