@@ -34,8 +34,8 @@ class QA extends React.Component {
     // this.setState({ [e.target.id]: e.target.value });
   }
 
-  handleSend({text_question : pattern, text_answer : template}){
-    //console.log({pattern, template});
+  handleSend({ text_question: pattern, text_answer: template }) {
+    // console.log({pattern, template});
     this.props.onSend({ pattern, template });
   }
 
@@ -51,8 +51,8 @@ class QA extends React.Component {
     return (
       <div>
         <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Pattern - Template</h4>
+          <CardHeader color="danger">
+            <h4 className={classes.cardTitleWhite}>Câu hỏi - Câu trả lời</h4>
           </CardHeader>
           <CardBody>
             <InputQA

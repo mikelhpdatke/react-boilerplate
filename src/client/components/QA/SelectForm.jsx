@@ -22,8 +22,8 @@ class SelectForm extends React.Component {
     this.state = {
       chatbot: '.',
       topic: '.',
-      listChatBot: [],
-      listTopic: [],
+      listChatBot: [{ chatbot_name: 'thái bình' }],
+      listTopic: [{ topic_name: 'câu hỏi chung' }],
     };
     this.handleChange = this.handleChange.bind(this);
   }

@@ -19,8 +19,8 @@ import NotificationsPage from 'views/Notifications/Notifications.jsx';
 const dashboardRoutes = [
   {
     path: '/dashboard',
-    sidebarName: 'AIML',
-    navbarName: 'AIML',
+    sidebarName: 'Nhập liệu',
+    navbarName: 'Giao diện nhập liệu',
     icon: Dashboard,
     component: Typography,
   },

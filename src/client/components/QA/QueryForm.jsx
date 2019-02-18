@@ -87,7 +87,7 @@ class QueryForm extends React.Component {
               multiline
               fullWidth
               id="text_question"
-              label="text_question"
+              label="Nhập câu hỏi"
               margin="normal"
               variant="outlined"
               value={this.state.text_question}
@@ -105,7 +105,7 @@ class QueryForm extends React.Component {
                 );
               }}
             >
-              Submit
+              Gửi
             </Button>
           </Grid>
         </Grid>

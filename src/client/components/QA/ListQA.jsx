@@ -127,9 +127,9 @@ class ListQA extends React.Component {
     return (
       <div>
         <Card>
-          <CardHeader color="primary">
+          <CardHeader color="danger">
             <h4 className={classes.cardTitleWhite}>
-              Recently Pattern-Template
+              Câu hỏi - Câu trả lời gần đây nhất
             </h4>
           </CardHeader>
           <CardBody>

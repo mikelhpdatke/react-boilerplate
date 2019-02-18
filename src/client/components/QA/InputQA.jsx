@@ -29,10 +29,11 @@ class InputQA extends React.Component {
     this.setState({ [e.target.id]: e.target.value });
   }
 
-  handleSend(){
+  handleSend() {
     const { text_answer, text_question } = this.state;
-    this.props.onSend({text_question, text_answer});
+    this.props.onSend({ text_question, text_answer });
   }
+
   componentWillReceiveProps({ text_question, text_answer, id_topics_q_a }) {
     if (
       text_question != this.state.text_question ||
@@ -56,7 +57,7 @@ class InputQA extends React.Component {
           <TextField
             required
             id="text_question"
-            label="Pattern"
+            label="Câu hỏi"
             margin="normal"
             variant="outlined"
             fullWidth
@@ -71,7 +72,7 @@ class InputQA extends React.Component {
             multiline
             fullWidth
             id="text_answer"
-            label="Template"
+            label="Câu trả lời"
             margin="normal"
             variant="outlined"
             value={text_answer}
@@ -80,7 +81,7 @@ class InputQA extends React.Component {
         </Grid>
         <Grid item>
           <Button variant="contained" color="primary" onClick={this.handleSend}>
-            Send
+            Lưu
           </Button>
         </Grid>
       </Grid>
